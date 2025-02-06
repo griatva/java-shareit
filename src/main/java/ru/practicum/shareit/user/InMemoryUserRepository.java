@@ -57,7 +57,7 @@ public class InMemoryUserRepository implements UserRepository {
 
     public void existsByEmail(Long id, String email) {
         boolean emailExists = users.values().stream()
-                .anyMatch(user -> user.getEmail().equals(email) && user.getId() != id);
+                .anyMatch(user -> user.getEmail().equals(email) && !user.getId().equals(id));
 
         if (emailExists) {
             throw new DuplicatedDataException("Email уже используется другим пользователем");
