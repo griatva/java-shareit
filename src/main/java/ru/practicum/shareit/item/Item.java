@@ -5,11 +5,11 @@ import lombok.Data;
 @Data
 public class Item {
 
-    private long id;
-    private long ownerId;
+    private Long id;
+    private Long ownerId;
     private String name;
     private String description;
     private Boolean available;
-    private long requestId;
+    private Long requestId;
 
 }

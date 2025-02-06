@@ -1,6 +1,8 @@
 package ru.practicum.shareit.item;
 
 import org.springframework.stereotype.Repository;
+import ru.practicum.shareit.item.dto.ItemUpdateDto;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,26 +25,13 @@ public class InMemoryItemRepository implements ItemRepository {
     }
 
     @Override
-    public Item update(Long itemId, Map<String, String> updates) {
+    public Item update(Long itemId, ItemUpdateDto updates) {
         Item item = items.get(itemId);
 
-        if (updates == null || updates.isEmpty()) {
-            return item;
-        }
+        if (updates.getName() != null) item.setName(updates.getName());
+        if (updates.getDescription() != null) item.setDescription(updates.getDescription());
+        if (updates.getAvailable() != null) item.setAvailable(updates.getAvailable());
 
-        updates.forEach((key, value) -> {
-            switch (key) {
-                case "name":
-                    item.setName(value);
-                    break;
-                case "description":
-                    item.setDescription(value);
-                    break;
-                case "available":
-                    item.setAvailable(Boolean.parseBoolean(value));
-                    break;
-            }
-        });
         return item;
     }
 
@@ -52,7 +41,7 @@ public class InMemoryItemRepository implements ItemRepository {
     }
 
     @Override
-    public List<Item> getAllItemsByOwnerId(Set<Long> itemIds) {
+    public List<Item> getItemsByIds(Set<Long> itemIds) {
 
         return items.entrySet().stream()
                 .filter(entry -> itemIds.contains(entry.getKey()))

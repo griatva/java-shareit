@@ -2,7 +2,6 @@ package ru.practicum.shareit.booking.dto;
 
 import jakarta.validation.constraints.*;
 import ru.practicum.shareit.booking.enums.Status;
-import ru.practicum.shareit.booking.validation.ValidStatus;
 
 import java.time.LocalDate;
 
@@ -11,7 +10,7 @@ import java.time.LocalDate;
  */
 public class BookingDto {
 
-    private long id;
+    private Long id;
 
     @NotNull(message = "Дата начала не может быть пустой")
     @FutureOrPresent(message = "Дата начала должна быть сегодня или в будущем")
@@ -22,17 +21,16 @@ public class BookingDto {
     private LocalDate end;
 
     @NotNull(message = "Должен быть указан id арендуемой вещи.")
-    private long itemId;
+    private Long itemId;
 
     @NotNull(message = "Должен быть указан id арендатора.")
-    private long bookerId;
+    private Long bookerId;
 
     @NotNull(message = "Должен быть указан статус")
-    @ValidStatus(message = "Статус должен быть одним из: WAITING, APPROVED, REJECTED, CANCELED.")
     private Status status;
 
     @AssertTrue(message = "Дата окончания должна быть равна или позже даты начала")
-    public boolean isEndAfterStart() {
+    public Boolean isEndAfterStart() {
         return !start.isAfter(end); //могут быть равны
     }
 }

@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemUpdateDto;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -26,7 +26,7 @@ public class ItemController {
 
     @PatchMapping("/{itemId}")
     public ItemDto update(@PathVariable long itemId,
-                          @RequestBody Map<String, String> updates,
+                          @RequestBody ItemUpdateDto updates,
                           @RequestHeader("X-Sharer-User-Id") long ownerId) {
         log.debug("Обновление вещи с id = [{}]", itemId);
         return itemService.update(itemId, updates, ownerId);
