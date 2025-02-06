@@ -34,7 +34,7 @@ public class ItemServiceImpl implements ItemService {
         if (!item.getOwnerId().equals(ownerId)) {
             throw new ValidationException("Редактировать вещь может только ее владелец");
         }
-        if(updates.getName() == null && updates.getDescription() == null && updates.getAvailable() == null) {
+        if (updates.getName() == null && updates.getDescription() == null && updates.getAvailable() == null) {
             return ItemMapper.toItemDto(item);
         }
         return ItemMapper.toItemDto(itemRepository.update(itemId, updates));
