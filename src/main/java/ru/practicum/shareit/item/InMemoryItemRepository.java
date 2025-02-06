@@ -28,9 +28,15 @@ public class InMemoryItemRepository implements ItemRepository {
     public Item update(Long itemId, ItemUpdateDto updates) {
         Item item = items.get(itemId);
 
-        if (updates.getName() != null) item.setName(updates.getName());
-        if (updates.getDescription() != null) item.setDescription(updates.getDescription());
-        if (updates.getAvailable() != null) item.setAvailable(updates.getAvailable());
+        if (updates.getName() != null) {
+            item.setName(updates.getName());
+        }
+        if (updates.getDescription() != null) {
+            item.setDescription(updates.getDescription());
+        }
+        if (updates.getAvailable() != null) {
+            item.setAvailable(updates.getAvailable());
+        }
 
         return item;
     }
