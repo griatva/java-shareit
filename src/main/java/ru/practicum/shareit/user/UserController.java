@@ -5,8 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
-
-import java.util.Map;
+import ru.practicum.shareit.user.dto.UserUpdateDto;
 
 @Slf4j
 @RestController
@@ -23,7 +22,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public UserDto update(@PathVariable long id, @RequestBody Map<String, String> updates) {
+    public UserDto update(@PathVariable long id, @RequestBody UserUpdateDto updates) {
         log.debug("Обновление пользователя с id = [{}]", id);
         return userService.update(id, updates);
     }
