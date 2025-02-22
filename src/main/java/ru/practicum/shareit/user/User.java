@@ -7,7 +7,7 @@ import ru.practicum.shareit.item.Item;
 import java.util.HashSet;
 import java.util.Set;
 
-@Table(name = "users", schema = "public")
+@Table(name = "users")
 @Entity
 @Data
 public class User {

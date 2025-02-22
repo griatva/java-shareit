@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import ru.practicum.shareit.user.User;
 
-@Table(name = "items", schema = "public")
+@Table(name = "items")
 @Entity
 @Data
 public class Item {
