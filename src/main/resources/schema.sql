@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     booker_id BIGINT NOT NULL,
     status VARCHAR(255) NOT NULL,
     CONSTRAINT pk_booking PRIMARY KEY (id),
-    CONSTRAINT fk_item FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
+    CONSTRAINT fk_booking_item FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
     CONSTRAINT fk_booker FOREIGN KEY (booker_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -45,6 +45,6 @@ CREATE TABLE IF NOT EXISTS comments (
     author_id BIGINT NOT NULL,
     created TIMESTAMP NOT NULL,
     CONSTRAINT pk_comment PRIMARY KEY (id),
-    CONSTRAINT fk_item FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
+    CONSTRAINT fk_comment_item FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
     CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE
 );
