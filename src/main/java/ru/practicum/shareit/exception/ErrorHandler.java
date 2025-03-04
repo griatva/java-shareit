@@ -41,4 +41,11 @@ public class ErrorHandler {
     public ErrorResponse handleValidationExceptions(MethodArgumentNotValidException e) {
         return new ErrorResponse("Ошибка валидации", e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleForbiddenExcepton(final ForbiddenExcepton e) {
+        return new ErrorResponse("Ошибка", e.getMessage());
+    }
+
 }

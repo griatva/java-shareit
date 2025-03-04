@@ -2,13 +2,12 @@ package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.DuplicatedDataException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserUpdateDto;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,49 +17,41 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto create(UserDto userDto) {
-        userRepository.existsByEmail(userDto.getId(), userDto.getEmail());
-        return UserMapper.toUserDto(userRepository.create(UserMapper.toUser(userDto)));
+        if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
+            throw new DuplicatedDataException("Пользователь с таким email уже существует");
+        }
+        return UserMapper.toUserDto(userRepository.save(UserMapper.toUser(userDto)));
     }
 
     @Override
-    public UserDto update(Long id, Map<String, String> updates) {
+    public UserDto update(Long id, UserUpdateDto updates) {
 
-        User user = userRepository.getById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + id + " не найден"));
 
-        Map<String, String> validatedUpdates = validateUpdates(id, updates);
-        return UserMapper.toUserDto(userRepository.update(id, validatedUpdates));
-    }
-
-
-    private Map<String, String> validateUpdates(Long id, Map<String, String> updates) {
-        if (updates == null || updates.isEmpty()) {
-            return Collections.emptyMap();
+        String name = updates.getName();
+        String email = updates.getEmail();
+        if (name == null && email == null) {
+            return UserMapper.toUserDto(user);
         }
 
-        Map<String, String> validatedUpdates = new HashMap<>();
-
-        updates.forEach((key, value) -> {
-            if (value != null && !value.isBlank()) {
-                switch (key) {
-                    case "name":
-                        validatedUpdates.put(key, value);
-                        break;
-                    case "email":
-                        userRepository.existsByEmail(id, value);
-                        validatedUpdates.put(key, value);
-                        break;
-                    default:
-                        throw new ValidationException("Поле " + key + " не поддерживается для обновления");
-                }
+        if (name != null) {
+            user.setName(name);
+        }
+        if (email != null) {
+            Optional<User> existingUser = userRepository.findByEmail(email);
+            if (existingUser.isPresent() && !existingUser.get().getId().equals(id)) {
+                throw new DuplicatedDataException("Этот email уже занят другим пользователем");
             }
-        });
-        return validatedUpdates;
+            user.setEmail(email);
+        }
+
+        return UserMapper.toUserDto(userRepository.save(user));
     }
 
     @Override
     public UserDto getById(long id) {
-        return userRepository.getById(id)
+        return userRepository.findById(id)
                 .map(UserMapper::toUserDto)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + id + " не найден"));
     }

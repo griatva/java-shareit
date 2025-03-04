@@ -4,8 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemUpdateDto;
+import ru.practicum.shareit.item.dto.ItemWithBookingsDto;
 
 import java.util.List;
 
@@ -33,20 +35,29 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ItemDto getById(@PathVariable long itemId) {
+    public ItemWithBookingsDto getById(@RequestHeader("X-Sharer-User-Id") long requesterId,
+                                       @PathVariable long itemId) {
         log.debug("Получение вещи с id = [{}]", itemId);
-        return itemService.getById(itemId);
+        return itemService.getById(itemId, requesterId);
     }
 
     @GetMapping
-    public List<ItemDto> getAllItemsByOwner(@RequestHeader("X-Sharer-User-Id") long ownerId) {
-        log.debug("Получение всех вещей пользователя с id = [{}]", ownerId);
-        return itemService.getAllItemsByOwner(ownerId);
+    public List<ItemWithBookingsDto> getAllItemsByOwnerWithBookings(@RequestHeader("X-Sharer-User-Id") long ownerId) {
+        log.debug("Получение всех вещей пользователя с id = [{}] с датами бронирования", ownerId);
+        return itemService.getAllItemsByOwnerWithBookings(ownerId);
     }
 
     @GetMapping("/search")
     public List<ItemDto> getAllItemsByText(@RequestParam String text) {
         log.debug("Получение всех доступных вещей по подстроке = [{}]", text);
         return itemService.getAllItemsByText(text);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDto createComment(@RequestHeader("X-Sharer-User-Id") long authorId,
+                                    @PathVariable long itemId,
+                                    @RequestBody CommentDto commentDto) {
+        log.debug("Создание отзыва для вещи с id = [{}] автором с id = [{}]", itemId, authorId);
+        return itemService.createComment(authorId, itemId, commentDto);
     }
 }
