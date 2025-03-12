@@ -2,16 +2,16 @@ package ru.practicum.shareit.server.booking;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.server.item.Item;
-import ru.practicum.shareit.server.item.ItemRepository;
-import ru.practicum.shareit.server.user.UserRepository;
 import ru.practicum.shareit.server.booking.dto.BookingDto;
-import ru.practicum.shareit.server.booking.enums.Status;
 import ru.practicum.shareit.server.booking.enums.BookingState;
+import ru.practicum.shareit.server.booking.enums.Status;
 import ru.practicum.shareit.server.exception.ForbiddenExcepton;
 import ru.practicum.shareit.server.exception.NotFoundException;
 import ru.practicum.shareit.server.exception.ValidationException;
+import ru.practicum.shareit.server.item.Item;
+import ru.practicum.shareit.server.item.ItemRepository;
 import ru.practicum.shareit.server.user.User;
+import ru.practicum.shareit.server.user.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -81,22 +81,22 @@ public class BookingServiceImpl implements BookingService {
 
         switch (state) {
             case ALL:
-                bookings = bookingRepository.findByBookerIdOrderByBookingStartDesc(bookerId);
+                bookings = bookingRepository.findByBookerIdOrderByStartDesc(bookerId);
                 break;
             case CURRENT:
-                bookings = bookingRepository.findByBookerIdAndBookingStartBeforeAndBookingEndAfterOrderByBookingStartDesc(bookerId, now, now);
+                bookings = bookingRepository.findByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(bookerId, now, now);
                 break;
             case PAST:
-                bookings = bookingRepository.findByBookerIdAndBookingEndBeforeOrderByBookingStartDesc(bookerId, now);
+                bookings = bookingRepository.findByBookerIdAndEndBeforeOrderByStartDesc(bookerId, now);
                 break;
             case FUTURE:
-                bookings = bookingRepository.findByBookerIdAndBookingStartAfterOrderByBookingStartDesc(bookerId, now);
+                bookings = bookingRepository.findByBookerIdAndStartAfterOrderByStartDesc(bookerId, now);
                 break;
             case WAITING:
-                bookings = bookingRepository.findByBookerIdAndStatusOrderByBookingStartDesc(bookerId, Status.WAITING);
+                bookings = bookingRepository.findByBookerIdAndStatusOrderByStartDesc(bookerId, Status.WAITING);
                 break;
             case REJECTED:
-                bookings = bookingRepository.findByBookerIdAndStatusOrderByBookingStartDesc(bookerId, Status.REJECTED);
+                bookings = bookingRepository.findByBookerIdAndStatusOrderByStartDesc(bookerId, Status.REJECTED);
                 break;
             default:
                 throw new ValidationException("Неизвестный статус бронирования: " + state);
@@ -117,22 +117,22 @@ public class BookingServiceImpl implements BookingService {
 
         switch (state) {
             case ALL:
-                bookings = bookingRepository.findByItemOwnerIdOrderByBookingStartDesc(ownerId);
+                bookings = bookingRepository.findByItemOwnerIdOrderByStartDesc(ownerId);
                 break;
             case CURRENT:
-                bookings = bookingRepository.findByItemOwnerIdAndBookingStartBeforeAndBookingEndAfterOrderByBookingStartDesc(ownerId, now, now);
+                bookings = bookingRepository.findByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(ownerId, now, now);
                 break;
             case PAST:
-                bookings = bookingRepository.findByItemOwnerIdAndBookingEndBeforeOrderByBookingStartDesc(ownerId, now);
+                bookings = bookingRepository.findByItemOwnerIdAndEndBeforeOrderByStartDesc(ownerId, now);
                 break;
             case FUTURE:
-                bookings = bookingRepository.findByItemOwnerIdAndBookingStartAfterOrderByBookingStartDesc(ownerId, now);
+                bookings = bookingRepository.findByItemOwnerIdAndStartAfterOrderByStartDesc(ownerId, now);
                 break;
             case WAITING:
-                bookings = bookingRepository.findByItemOwnerIdAndStatusOrderByBookingStartDesc(ownerId, Status.WAITING);
+                bookings = bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(ownerId, Status.WAITING);
                 break;
             case REJECTED:
-                bookings = bookingRepository.findByItemOwnerIdAndStatusOrderByBookingStartDesc(ownerId, Status.REJECTED);
+                bookings = bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(ownerId, Status.REJECTED);
                 break;
             default:
                 throw new IllegalArgumentException("Неизвестный статус бронирования: " + state);

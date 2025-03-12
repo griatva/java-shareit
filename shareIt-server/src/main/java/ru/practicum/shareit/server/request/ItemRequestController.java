@@ -3,8 +3,8 @@ package ru.practicum.shareit.server.request;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.server.request.dto.ItemRequestWithItemInfoDto;
 import ru.practicum.shareit.server.request.dto.ItemRequestDto;
+import ru.practicum.shareit.server.request.dto.ItemRequestWithItemInfoDto;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class ItemRequestController {
     }
 
     @GetMapping("/all")
-    public List<ItemRequestDto> getAllWithSort () {
+    public List<ItemRequestDto> getAllWithSort() {
         log.debug("Получение всех запросов");
         return itemRequestService.getAllWithSort();
     }

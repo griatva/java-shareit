@@ -3,9 +3,9 @@ package ru.practicum.shareit.server.item;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.server.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.server.item.dto.CommentDto;
 import ru.practicum.shareit.server.item.dto.ItemDto;
+import ru.practicum.shareit.server.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.server.item.dto.ItemWithBookingsDto;
 
 import java.util.List;

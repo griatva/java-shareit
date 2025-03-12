@@ -2,15 +2,15 @@ package ru.practicum.shareit.server.request;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.server.item.Item;
-import ru.practicum.shareit.server.request.dto.ItemRequestWithItemInfoDto;
-import ru.practicum.shareit.server.user.UserRepository;
 import ru.practicum.shareit.server.exception.NotFoundException;
+import ru.practicum.shareit.server.item.Item;
 import ru.practicum.shareit.server.item.ItemMapper;
 import ru.practicum.shareit.server.item.ItemRepository;
 import ru.practicum.shareit.server.item.dto.ItemProposedDto;
 import ru.practicum.shareit.server.request.dto.ItemRequestDto;
+import ru.practicum.shareit.server.request.dto.ItemRequestWithItemInfoDto;
 import ru.practicum.shareit.server.user.User;
+import ru.practicum.shareit.server.user.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -30,9 +30,11 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public ItemRequestDto create(Long requestorId, ItemRequestDto itemRequestDto) {
         User requestor = findUserById(requestorId);
+
         ItemRequest itemRequest = ItemRequestMapper.toItemRequest(itemRequestDto);
         itemRequest.setRequestor(requestor);
         itemRequest.setCreateDate(LocalDateTime.now());
+
         ItemRequest savedItemRequest = itemRequestRepository.save(itemRequest);
 
         return ItemRequestMapper.toItemRequestDto(savedItemRequest);
@@ -42,8 +44,8 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     public List<ItemRequestWithItemInfoDto> getAllByRequestorIdWithSort(Long requestorId) {
         findUserById(requestorId);
         List<ItemRequest> requests = itemRequestRepository.findByRequestorId(requestorId);
-        if(requests.isEmpty()) {
-            return  Collections.emptyList();
+        if (requests.isEmpty()) {
+            return Collections.emptyList();
         }
 
         List<Long> requestIds = requests.stream().map(ItemRequest::getId).toList();
@@ -60,7 +62,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
                         request,
                         itemsByRequest.getOrDefault(request.getId(), List.of())
                 ))
-                .sorted(Comparator.comparing(ItemRequestWithItemInfoDto::getCreated))
+                .sorted(Comparator.comparing(ItemRequestWithItemInfoDto::getCreated).reversed())
                 .collect(Collectors.toList());
     }
 

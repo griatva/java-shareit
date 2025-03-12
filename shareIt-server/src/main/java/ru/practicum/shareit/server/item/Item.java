@@ -1,12 +1,16 @@
 package ru.practicum.shareit.server.item;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.server.user.User;
 
 @Table(name = "items")
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Item {
 
     @Id

@@ -17,7 +17,7 @@ public class ItemRequestController {
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestHeader("X-Sharer-User-Id") long requestorId,
-                                 @Valid @RequestBody ItemRequestDto itemRequestDto) {
+                                         @Valid @RequestBody ItemRequestDto itemRequestDto) {
         log.debug("Создание запроса [{}], id заказчика = [{}]", itemRequestDto, requestorId);
         return itemRequestClient.create(requestorId, itemRequestDto);
     }
@@ -29,7 +29,7 @@ public class ItemRequestController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Object> getAllWithSort (@RequestHeader("X-Sharer-User-Id") long userId) {
+    public ResponseEntity<Object> getAllWithSort(@RequestHeader("X-Sharer-User-Id") long userId) {
         log.debug("Получение всех запросов");
         return itemRequestClient.getAllWithSort(userId);
     }

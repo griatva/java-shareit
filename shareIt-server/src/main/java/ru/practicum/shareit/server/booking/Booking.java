@@ -1,7 +1,9 @@
 package ru.practicum.shareit.server.booking;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.server.booking.enums.Status;
 import ru.practicum.shareit.server.item.Item;
 import ru.practicum.shareit.server.user.User;
@@ -11,6 +13,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "bookings")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Booking {
 
     @Id
@@ -18,10 +22,10 @@ public class Booking {
     private Long id;
 
     @Column(name = "start_date", nullable = false)
-    private LocalDateTime bookingStart;
+    private LocalDateTime start;
 
     @Column(name = "end_date", nullable = false)
-    private LocalDateTime bookingEnd;
+    private LocalDateTime end;
 
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)

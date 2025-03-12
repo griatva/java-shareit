@@ -9,25 +9,25 @@ import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    List<Booking> findByBookerIdOrderByBookingStartDesc(Long bookerId);
+    List<Booking> findByBookerIdOrderByStartDesc(Long bookerId);
 
-    List<Booking> findByBookerIdAndBookingStartBeforeAndBookingEndAfterOrderByBookingStartDesc(Long bookerId, LocalDateTime now1, LocalDateTime now2);
+    List<Booking> findByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(Long bookerId, LocalDateTime now1, LocalDateTime now2);
 
-    List<Booking> findByBookerIdAndBookingEndBeforeOrderByBookingStartDesc(Long bookerId, LocalDateTime now);
+    List<Booking> findByBookerIdAndEndBeforeOrderByStartDesc(Long bookerId, LocalDateTime now);
 
-    List<Booking> findByBookerIdAndBookingStartAfterOrderByBookingStartDesc(Long bookerId, LocalDateTime now);
+    List<Booking> findByBookerIdAndStartAfterOrderByStartDesc(Long bookerId, LocalDateTime now);
 
-    List<Booking> findByBookerIdAndStatusOrderByBookingStartDesc(Long bookerId, Status status);
+    List<Booking> findByBookerIdAndStatusOrderByStartDesc(Long bookerId, Status status);
 
-    List<Booking> findByItemOwnerIdOrderByBookingStartDesc(Long ownerId);
+    List<Booking> findByItemOwnerIdOrderByStartDesc(Long ownerId);
 
-    List<Booking> findByItemOwnerIdAndBookingStartBeforeAndBookingEndAfterOrderByBookingStartDesc(Long ownerId, LocalDateTime now1, LocalDateTime now2);
+    List<Booking> findByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(Long ownerId, LocalDateTime now1, LocalDateTime now2);
 
-    List<Booking> findByItemOwnerIdAndBookingEndBeforeOrderByBookingStartDesc(Long ownerId, LocalDateTime now);
+    List<Booking> findByItemOwnerIdAndEndBeforeOrderByStartDesc(Long ownerId, LocalDateTime now);
 
-    List<Booking> findByItemOwnerIdAndBookingStartAfterOrderByBookingStartDesc(Long ownerId, LocalDateTime now);
+    List<Booking> findByItemOwnerIdAndStartAfterOrderByStartDesc(Long ownerId, LocalDateTime now);
 
-    List<Booking> findByItemOwnerIdAndStatusOrderByBookingStartDesc(Long ownerId, Status status);
+    List<Booking> findByItemOwnerIdAndStatusOrderByStartDesc(Long ownerId, Status status);
 
     List<Booking> findByItemIdIn(List<Long> itemIds);
 

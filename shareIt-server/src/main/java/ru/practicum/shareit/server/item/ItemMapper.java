@@ -2,10 +2,10 @@ package ru.practicum.shareit.server.item;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.server.item.dto.ItemDto;
-import ru.practicum.shareit.server.item.dto.ItemProposedDto;
 import ru.practicum.shareit.server.booking.dto.BookingShortDto;
 import ru.practicum.shareit.server.item.dto.CommentDto;
+import ru.practicum.shareit.server.item.dto.ItemDto;
+import ru.practicum.shareit.server.item.dto.ItemProposedDto;
 import ru.practicum.shareit.server.item.dto.ItemWithBookingsDto;
 
 import java.util.List;
@@ -69,6 +69,5 @@ public class ItemMapper {
                 .map(ItemMapper::toItemProposedDto)
                 .collect(Collectors.toList());
     }
-
 
 }

@@ -1,7 +1,9 @@
 package ru.practicum.shareit.server.item;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.server.user.User;
 
 import java.time.LocalDateTime;
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "comments", schema = "public")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Comment {
 
     @Id

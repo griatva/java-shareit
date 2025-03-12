@@ -1,8 +1,8 @@
 package ru.practicum.shareit.server.request;
 
-import ru.practicum.shareit.server.request.dto.ItemRequestWithItemInfoDto;
 import ru.practicum.shareit.server.item.dto.ItemProposedDto;
 import ru.practicum.shareit.server.request.dto.ItemRequestDto;
+import ru.practicum.shareit.server.request.dto.ItemRequestWithItemInfoDto;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import practicum.item.dto.ItemUpdateDto;
 import practicum.item.dto.CommentDto;
 import practicum.item.dto.ItemDto;
+import practicum.item.dto.ItemUpdateDto;
 
 @Slf4j
 @RestController
@@ -19,7 +19,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestHeader("X-Sharer-User-Id") long ownerId,
-                          @Valid @RequestBody ItemDto itemDto) {
+                                         @Valid @RequestBody ItemDto itemDto) {
         log.debug("Создание вещи [{}], id владельца = [{}]", itemDto, ownerId);
         return itemClient.create(ownerId, itemDto);
     }
@@ -34,7 +34,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ResponseEntity<Object> getById(@RequestHeader("X-Sharer-User-Id") long requesterId,
-                                       @PathVariable long itemId) {
+                                          @PathVariable long itemId) {
         log.debug("Получение вещи с id = [{}]", itemId);
         return itemClient.getById(itemId, requesterId);
     }
@@ -47,7 +47,7 @@ public class ItemController {
 
     @GetMapping("/search")
     public ResponseEntity<Object> getAllItemsByText(@RequestHeader("X-Sharer-User-Id") long userId,
-                                           @RequestParam String text) {
+                                                    @RequestParam String text) {
         log.debug("Получение всех доступных вещей по подстроке = [{}]", text);
         return itemClient.getAllItemsByText(userId, text);
     }

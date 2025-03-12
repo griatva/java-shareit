@@ -42,7 +42,7 @@ public class BookingController {
 
     @GetMapping
     public List<BookingDto> getBookingsByBookerIdWithFilter(@RequestHeader("X-Sharer-User-Id") long bookerId,
-                                                            @RequestParam(name = "state", defaultValue = "ALL") BookingState state) {
+                                            @RequestParam(name = "state", defaultValue = "ALL") BookingState state) {
         log.debug("Получение всех своих бронирований со статусом для фильтрации = [{}] заказчиком с id = [{}]",
                 state, bookerId);
         return bookingService.getBookingsByBookerIdWithFilter(bookerId, state);
@@ -50,7 +50,7 @@ public class BookingController {
 
     @GetMapping("/owner")
     public List<BookingDto> getBookingsByOwnerIdWithFilter(@RequestHeader("X-Sharer-User-Id") long ownerId,
-                                                           @RequestParam(name = "state", defaultValue = "ALL") BookingState state) {
+                                            @RequestParam(name = "state", defaultValue = "ALL") BookingState state) {
         log.debug("Получение всех своих бронирований со статусом для фильтрации = [{}] владельцем с id = [{}]",
                 state, ownerId);
         return bookingService.getBookingsByOwnerIdWithFilter(ownerId, state);

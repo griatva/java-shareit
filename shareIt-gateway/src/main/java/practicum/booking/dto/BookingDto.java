@@ -17,11 +17,11 @@ public class BookingDto {
 
     @NotNull(message = "Дата начала не может быть пустой")
     @FutureOrPresent(message = "Дата начала должна быть сегодня или в будущем")
-    private LocalDateTime bookingStart;
+    private LocalDateTime start;
 
     @NotNull(message = "Дата начала не может быть пустой")
     @FutureOrPresent(message = "Дата окончания должна быть сегодня или в будущем")
-    private LocalDateTime bookingEnd;
+    private LocalDateTime end;
 
     @NotNull(message = "Должен быть указан id арендуемой вещи.")
     private Long itemId;
@@ -34,6 +34,6 @@ public class BookingDto {
 
     @AssertTrue(message = "Дата окончания должна быть равна или позже даты начала")
     public Boolean isStartBeforeEnd() {
-        return bookingStart.isBefore(bookingEnd);
+        return start.isBefore(end);
     }
 }
