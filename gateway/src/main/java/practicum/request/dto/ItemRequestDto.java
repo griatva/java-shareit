@@ -11,8 +11,8 @@ public class ItemRequestDto {
 
     private Long id;
 
-    @NotBlank(message = "Описание не может быть пустым")
-    @Size(max = 300, message = "Длина описания должна быть не более 300 символов")
+    @NotBlank(message = "Description must not be blank")
+    @Size(max = 300, message = "Description length must not exceed 300 characters")
     private String description;
 
     private LocalDateTime created;

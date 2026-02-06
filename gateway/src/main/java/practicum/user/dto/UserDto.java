@@ -9,11 +9,11 @@ public class UserDto {
 
     private Long id;
 
-    @NotBlank(message = "Имя не может быть пустым")
+    @NotBlank(message = "Name must not be blank")
     private String name;
 
-    @NotBlank(message = "Адрес электронной почты не может быть пустым")
-    @Email(message = "Некорректный адрес электронной почты")
+    @NotBlank(message = "Email must not be blank")
+    @Email(message = "Invalid email address")
     private String email;
 
 }

@@ -20,25 +20,26 @@ public class ItemRequestController {
     @PostMapping
     public ItemRequestDto create(@RequestHeader("X-Sharer-User-Id") long requestorId,
                                  @RequestBody ItemRequestDto itemRequestDto) {
-        log.debug("Создание запроса [{}], id заказчика = [{}]", itemRequestDto, requestorId);
+        log.debug("Creating item request [{}], requestorId = [{}]", itemRequestDto, requestorId);
         return itemRequestService.create(requestorId, itemRequestDto);
     }
 
     @GetMapping
     public List<ItemRequestWithItemInfoDto> getAllByRequestorIdWithSort(@RequestHeader("X-Sharer-User-Id") long requestorId) {
-        log.debug("Получение всех запросов пользователя с id = [{}] с информацией о преложенных вещах", requestorId);
+        log.debug("Retrieving all requests for requestorId = [{}] with information about proposed items",
+                requestorId);
         return itemRequestService.getAllByRequestorIdWithSort(requestorId);
     }
 
     @GetMapping("/all")
     public List<ItemRequestDto> getAllWithSort() {
-        log.debug("Получение всех запросов");
+        log.debug("Retrieving all item requests");
         return itemRequestService.getAllWithSort();
     }
 
     @GetMapping("/{requestId}")
     public ItemRequestWithItemInfoDto getById(@PathVariable Long requestId) {
-        log.debug("Получение запроса с id = [{}] с информацией о преложенных вещах", requestId);
+        log.debug("Retrieving item request with id = [{}] with information about proposed items", requestId);
         return itemRequestService.getById(requestId);
     }
 }

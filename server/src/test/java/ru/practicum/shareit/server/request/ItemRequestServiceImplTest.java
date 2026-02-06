@@ -51,10 +51,10 @@ class ItemRequestServiceImplTest {
 
 
     @Test
-    @DisplayName("Должен выбросить исключение и не сохранять запрос в БД, если юзер не найден")
+    @DisplayName("Should throw an exception and not save the request to the database if the user is not found")
     void create_shouldThrowExceptionAndNotSaveRequestIntoDB_ifRequestorNotFound() {
         User user = new User(1L, "Ivan Ivanov", "ivan@gmail.com", null);
-        ItemRequestDto itemRequestDto = new ItemRequestDto(null, "Нужен шуруповерт", null);
+        ItemRequestDto itemRequestDto = new ItemRequestDto(null, "Need a drill", null);
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -64,12 +64,12 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен сохранять корректный ItemRequest")
+    @DisplayName("Should save a correct ItemRequest")
     void create_ShouldSaveCorrectItemRequest() {
         //given
         User requestor = new User(1L, "Ivan Ivanov", "ivan@gmail.com", null);
-        ItemRequest itemRequestExpected = new ItemRequest(1L, "Нужен шуруповерт", requestor, LocalDateTime.now());
-        ItemRequestDto itemRequestDto = new ItemRequestDto(null, "Нужен шуруповерт", null);
+        ItemRequest itemRequestExpected = new ItemRequest(1L, "Need a drill", requestor, LocalDateTime.now());
+        ItemRequestDto itemRequestDto = new ItemRequestDto(null, "Need a drill", null);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(requestor));
         when(itemRequestRepository.save(any(ItemRequest.class))).thenAnswer(invocationOnMock -> {
             ItemRequest savedRequest = invocationOnMock.getArgument(0);
@@ -93,11 +93,11 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вернуть корректный ItemRequestDto")
+    @DisplayName("Should return a correct ItemRequestDto")
     void create_shouldReturnCorrectItemRequestDto() {
         //given
         User requestor = new User(1L, "Ivan Ivanov", "ivan@gmail.com", null);
-        ItemRequestDto itemRequestDto = new ItemRequestDto(null, "Нужен шуруповерт", null);
+        ItemRequestDto itemRequestDto = new ItemRequestDto(null, "Need a drill", null);
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(requestor));
         when(itemRequestRepository.save(any(ItemRequest.class))).thenAnswer(invocation -> {
@@ -124,7 +124,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение, если юзер не найден")
+    @DisplayName("Should throw an exception if the user is not found")
     void getAllByRequestorIdWithSort_shouldThrowException_ifRequestorNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(NotFoundException.class, () -> itemRequestService.getAllByRequestorIdWithSort(1L));
@@ -132,7 +132,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вернуть пустой лист, если у юзера нет своих запросов")
+    @DisplayName("Should return an empty list if the user has no requests")
     void getAllByRequestorIdWithSort_shouldReturnEmptyList_ifUserDasNotHaveRequests() {
         //given
         User requestor = new User(1L, "Ivan Ivanov", "ivan@gmail.com", null);
@@ -149,23 +149,23 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вернуть лист с корректно заполненными ItemRequestWithItemInfoDto " +
-            "с сортировкой по дате создания от новых к старым")
+    @DisplayName("Should return a list of correctly populated ItemRequestWithItemInfoDto sorted by " +
+            "creation date from newest to oldest")
     void getAllByRequestorIdWithSort_shouldReturnItemRequestWithItemInfoDtoListWithSortByDateDesc() {
         //given
         User requestor = new User(1L, "Ivan Ivanov", "ivan@gmail.com", null);
         User owner1 = new User(2L, "Piotr Petrov", "piotr@gmail.com", null);
         User owner2 = new User(3L, "Vasiliy Vasilyev", "vasya@gmail.com", null);
 
-        ItemRequest itemRequest1 = new ItemRequest(1L, "Нужна отвертка", requestor,
+        ItemRequest itemRequest1 = new ItemRequest(1L, "Need a screwdriver", requestor,
                 LocalDateTime.of(2025, 3, 1, 23, 18, 10, 10));
-        ItemRequest itemRequest2 = new ItemRequest(2L, "Нужен шуруповерт", requestor,
+        ItemRequest itemRequest2 = new ItemRequest(2L, "Need a drill", requestor,
                 LocalDateTime.of(2025, 3, 2, 23, 18, 10, 10));
         List<ItemRequest> requests = List.of(itemRequest1, itemRequest2);
 
-        Item item1 = new Item(1L, owner1, "Отвертка", "Крестовая отвертка", true, 1L);
-        Item item2 = new Item(2L, owner2, "Шуруповерт1", "Желтый шуруповерт", true, 2L);
-        Item item3 = new Item(3L, owner2, "Шуруповерт2", "Красный шуруповерт", true, 2L);
+        Item item1 = new Item(1L, owner1, "Screwdriver", "Phillips screwdriver", true, 1L);
+        Item item2 = new Item(2L, owner2, "Drill1", "Yellow drill", true, 2L);
+        Item item3 = new Item(3L, owner2, "Drill2", "Red drill", true, 2L);
         owner1.setItems(Set.of(item1));
         owner2.setItems(Set.of(item2, item3));
         List<Item> items = List.of(item1, item2, item3);
@@ -224,7 +224,7 @@ class ItemRequestServiceImplTest {
 
 
     @Test
-    @DisplayName("Должен вернуть пустой лист, если в БД нет запросов")
+    @DisplayName("Should return an empty list if there are no requests in the database")
     void getAllWithSort_shouldReturnEmptyList_ifThereAreNoRequestsInDB() {
         when(itemRequestRepository.findAllByOrderByCreateDateDesc()).thenReturn(Collections.emptyList());
         List<ItemRequestDto> requests = itemRequestService.getAllWithSort();
@@ -232,23 +232,23 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вернуть лист со всеми ItemRequestDto в базе с сортировкой по дате создания от новых к старым")
+    @DisplayName("Should return a list of all ItemRequestDto in the database sorted by creation date from newest to oldest")
     void getAllWithSort_shouldReturnItemRequestDtoListWithSortByDateDesc() {
         //given
         User requestor1 = new User(1L, "Ivan Ivanov", "ivan@gmail.com", null);
         User requestor2 = new User(1L, "Piotr Petrov", "piotr@gmail.com", null);
 
-        ItemRequest itemRequest1 = new ItemRequest(1L, "Нужна отвертка", requestor1,
+        ItemRequest itemRequest1 = new ItemRequest(1L, "Need a screwdriver", requestor1,
                 LocalDateTime.of(2025, 3, 1, 23, 18, 10, 10));
-        ItemRequest itemRequest2 = new ItemRequest(2L, "Нужен шуруповерт", requestor2,
+        ItemRequest itemRequest2 = new ItemRequest(2L, "Need a drill", requestor2,
                 LocalDateTime.of(2025, 3, 2, 23, 18, 10, 10));
 
         List<ItemRequest> requests = List.of(itemRequest2, itemRequest1);
         when(itemRequestRepository.findAllByOrderByCreateDateDesc()).thenReturn(requests);
         List<ItemRequestDto> requestsDtoListExpected = List.of(
-                new ItemRequestDto(2L, "Нужен шуруповерт",
+                new ItemRequestDto(2L, "Need a drill",
                         LocalDateTime.of(2025, 3, 2, 23, 18, 10, 10)),
-                new ItemRequestDto(1L, "Нужна отвертка",
+                new ItemRequestDto(1L, "Need a screwdriver",
                         LocalDateTime.of(2025, 3, 1, 23, 18, 10, 10)));
 
         //when
@@ -269,23 +269,23 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение, если запрос не найден")
+    @DisplayName("Should throw an exception if the request is not found")
     void getById_shouldThrowException_ifRequestNotFound() {
         when(itemRequestRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(NotFoundException.class, () -> itemRequestService.getById(1L));
     }
 
     @Test
-    @DisplayName("Должен вернуть ItemRequestWithItemInfoDto с корректно заполненными полями")
+    @DisplayName("Should return ItemRequestWithItemInfoDto with correctly populated fields")
     void getById_shouldReturnCorrectItemRequestWithItemInfoDto() {
         //given
         User requestor = new User(1L, "Ivan Ivanov", "ivan@gmail.com", null);
         User owner1 = new User(2L, "Piotr Petrov", "piotr@gmail.com", null);
         User owner2 = new User(3L, "Vasiliy Vasilyev", "vasya@gmail.com", null);
-        ItemRequest itemRequest = new ItemRequest(1L, "Нужна отвертка", requestor,
+        ItemRequest itemRequest = new ItemRequest(1L, "Need a screwdriver", requestor,
                 LocalDateTime.of(2025, 3, 1, 23, 18, 10, 10));
-        Item item1 = new Item(1L, owner1, "Отвертка1", "Крестовая отвертка", true, 1L);
-        Item item2 = new Item(2L, owner2, "Отвертка2", "Многофункциональная отвертка", true, 1L);
+        Item item1 = new Item(1L, owner1, "Screwdriver1", "Phillips screwdriver", true, 1L);
+        Item item2 = new Item(2L, owner2, "Screwdriver2", "Multifunctional screwdriver", true, 1L);
         List<Item> items = List.of(item1, item2);
 
         when(itemRequestRepository.findById(anyLong())).thenReturn(Optional.of(itemRequest));

@@ -30,7 +30,7 @@ public class BookingServiceImpl implements BookingService {
         User booker = findUserById(bookerId);
         Item item = findItemById(bookingDto.getItemId());
         if (!item.getAvailable()) {
-            throw new ValidationException("Эта вещь недоступна для бронирования на эти даты");
+            throw new ValidationException("Item is not available for booking for the specified dates");
         }
         bookingDto.setStatus(Status.WAITING);
         Booking booking = BookingMapper.toBooking(bookingDto, item, booker);
@@ -46,7 +46,7 @@ public class BookingServiceImpl implements BookingService {
         findItemById(item.getId());
 
         if (!item.getOwner().getId().equals(ownerId)) {
-            throw new ValidationException("Согласовывать бронирование может только владелец вещи");
+            throw new ValidationException("Only the item owner can approve or reject the booking");
         }
 
         if (approved) {
@@ -67,7 +67,7 @@ public class BookingServiceImpl implements BookingService {
         Long ownerId = booking.getItem().getOwner().getId();
 
         if (!bookerId.equals(requesterId) && !ownerId.equals(requesterId)) {
-            throw new ValidationException("Получить бронирование может только владелец или заказчик вещи");
+            throw new ValidationException("Only the item owner or the booker can retrieve the booking");
         }
 
         return BookingMapper.toBookingDto(booking);
@@ -99,7 +99,7 @@ public class BookingServiceImpl implements BookingService {
                 bookings = bookingRepository.findByBookerIdAndStatusOrderByStartDesc(bookerId, Status.REJECTED);
                 break;
             default:
-                throw new ValidationException("Неизвестный статус бронирования: " + state);
+                throw new ValidationException("Unknown booking state: " + state);
         }
 
         return BookingMapper.toBookingDtoList(bookings);
@@ -135,7 +135,7 @@ public class BookingServiceImpl implements BookingService {
                 bookings = bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(ownerId, Status.REJECTED);
                 break;
             default:
-                throw new IllegalArgumentException("Неизвестный статус бронирования: " + state);
+                throw new IllegalArgumentException("Unknown booking state: " + state);
         }
 
         return BookingMapper.toBookingDtoList(bookings);
@@ -143,17 +143,17 @@ public class BookingServiceImpl implements BookingService {
 
     private User findUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new ForbiddenExcepton("Пользователь с id " + userId + " не найден"));
+                .orElseThrow(() -> new ForbiddenExcepton("User with id " + userId + " was not found"));
     }
 
     private Item findItemById(Long itemId) {
         return itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException("Вещь с id " + itemId + " не найдена"));
+                .orElseThrow(() -> new NotFoundException("Item with id " + itemId + " was not found"));
     }
 
     private Booking findBookingById(Long bookingId) {
         return bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new NotFoundException("Бронирование с id " + bookingId + " не найдено"));
+                .orElseThrow(() -> new NotFoundException("Booking with id " + bookingId + " was not found"));
     }
 }
 

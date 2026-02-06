@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto create(UserDto userDto) {
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
-            throw new DuplicatedDataException("Пользователь с таким email уже существует");
+            throw new DuplicatedDataException("User with this email already exists");
         }
         return UserMapper.toUserDto(userRepository.save(UserMapper.toUser(userDto)));
     }
@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     public UserDto update(Long id, UserUpdateDto updates) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Пользователь с id " + id + " не найден"));
+                .orElseThrow(() -> new NotFoundException("User with id " + id + " was not found"));
 
         String name = updates.getName();
         String email = updates.getEmail();
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
         if (email != null) {
             Optional<User> existingUser = userRepository.findByEmail(email);
             if (existingUser.isPresent() && !existingUser.get().getId().equals(id)) {
-                throw new DuplicatedDataException("Этот email уже занят другим пользователем");
+                throw new DuplicatedDataException("This email is already in use by another user");
             }
             user.setEmail(email);
         }
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getById(long id) {
         return userRepository.findById(id)
                 .map(UserMapper::toUserDto)
-                .orElseThrow(() -> new NotFoundException("Пользователь с id " + id + " не найден"));
+                .orElseThrow(() -> new NotFoundException("User with id " + id + " was not found"));
     }
 
     @Override

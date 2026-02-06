@@ -52,7 +52,7 @@ class BookingServiceImplTest {
 
 
     @Test
-    @DisplayName("Должен выбросить исключение, если юзер не найден")
+    @DisplayName("Should throw an exception if the user is not found")
     void create_shouldThrowException_ifBookerNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(ForbiddenExcepton.class, () -> bookingService.create(1L, new BookingDto()));
@@ -60,7 +60,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение, если вещь не найдена")
+    @DisplayName("Should throw an exception if the item is not found")
     void create_shouldThrowException_ifItemNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
         when(itemRepository.findById(anyLong())).thenReturn(Optional.empty());
@@ -80,11 +80,11 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение, если вещь недоступна")
+    @DisplayName("Should throw an exception if the item is unavailable")
     void create_shouldThrowException_ifItemIsNotAvailable() {
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", null);
-        Item item = new Item(1L, owner, "Отвертка",
-                "Крестовая отвертка", false, null);
+        Item item = new Item(1L, owner, "Screwdriver",
+                "Phillips screwdriver", false, null);
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));
@@ -104,12 +104,12 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен установить статус WAITING и сохранить корректный booking")
+    @DisplayName("Should set status to WAITING and save a correct booking")
     void create_shouldSetStatusToWAITINGAndSaveCorrectBooking() {
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", null);
         User booker = new User(2L, "Irina Ivanova", "irina@gmail.com", null);
-        Item item = new Item(3L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
+        Item item = new Item(3L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(booker));
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));
@@ -155,12 +155,12 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вернуть корректный BookingDto")
+    @DisplayName("Should return a correct BookingDto")
     void create_shouldReturnCorrectBookingDto() {
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", null);
         User booker = new User(2L, "Irina Ivanova", "irina@gmail.com", null);
-        Item item = new Item(3L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
+        Item item = new Item(3L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(booker));
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));
@@ -216,7 +216,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение, если юзер не найден")
+    @DisplayName("Should throw an exception if the user is not found")
     void approveOrRejectBooking_shouldThrowException_ifOwnerNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(ForbiddenExcepton.class, () -> bookingService.approveOrRejectBooking(
@@ -225,7 +225,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение, если букинг не найден")
+    @DisplayName("Should throw an exception if the booking is not found")
     void approveOrRejectBooking_shouldThrowException_ifBookingNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.empty());
@@ -236,10 +236,10 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение, если вещь не найдена")
+    @DisplayName("Should throw an exception if the item is not found")
     void approveOrRejectBooking_shouldThrowException_ifItemNotFound() {
-        Item item = new Item(3L, new User(), "Отвертка",
-                "Крестовая отвертка", true, null);
+        Item item = new Item(3L, new User(), "Screwdriver",
+                "Phillips screwdriver", true, null);
 
         Booking booking = new Booking(
                 4L,
@@ -259,12 +259,12 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение, если согласовать хочет не владелец")
+    @DisplayName("Should throw an exception if a non-owner tries to approve the booking")
     void approveOrRejectBooking_shouldThrowException_ifNotOwnerTryToApprove() {
         User ownerActual = new User(1L, "Ivan Ivanov", "ivan@gmail.com", null);
         User ownerFake = new User(2L, "Irina Ivanova", "irina@gmail.com", null);
-        Item item = new Item(3L, ownerActual, "Отвертка",
-                "Крестовая отвертка", true, null);
+        Item item = new Item(3L, ownerActual, "Screwdriver",
+                "Phillips screwdriver", true, null);
 
         Booking booking = new Booking(
                 4L,
@@ -285,13 +285,13 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен установить переданный статус и сохранить корректный букинг")
+    @DisplayName("Should set the provided status and save a correct booking")
     void approveOrRejectBooking_shouldSetStatusAndSaveCorrectBooking() {
         //given
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", null);
         User booker = new User(2L, "Irina Ivanova", "irina@gmail.com", null);
-        Item item = new Item(3L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
+        Item item = new Item(3L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
 
         Booking booking = new Booking(
                 4L,
@@ -332,13 +332,13 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вернуть корректный BookingDto")
+    @DisplayName("Should return a correct BookingDto")
     void approveOrRejectBooking_shouldReturnCorrectBookingDto() {
         //given
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", null);
         User booker = new User(2L, "Irina Ivanova", "irina@gmail.com", null);
-        Item item = new Item(3L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
+        Item item = new Item(3L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
 
         Booking booking = new Booking(
                 4L,
@@ -388,14 +388,14 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение, если юзер не найден")
+    @DisplayName("Should throw an exception if the user is not found")
     void getById_shouldThrowException_ifOwnerNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(ForbiddenExcepton.class, () -> bookingService.getById(1L, 2L));
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение, если букинг не найден")
+    @DisplayName("Should throw an exception if the booking is not found")
     void getById_shouldThrowException_ifBookingNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.empty());
@@ -404,14 +404,14 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение, если получить бронирование хочет не владелец вещи и не букер")
+    @DisplayName("Should throw an exception if a non-owner and non-booker tries to retrieve the booking")
     void getById_shouldThrowException_ifNotOwnerOrBookerTryToGetBooking() {
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", null);
         User booker = new User(2L, "Irina Ivanova", "irina@gmail.com", null);
         User requester = new User(3L, "Valeriy Vasiliev", "valeriy@gmail.com", null);
 
-        Item item = new Item(4L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
+        Item item = new Item(4L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
 
         Booking booking = new Booking(
                 5L,
@@ -429,13 +429,13 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вернуть корректный BookingDto")
+    @DisplayName("Should return a correct BookingDto")
     void getById_shouldReturnCorrectBookingDto() {
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", null);
         User booker = new User(2L, "Irina Ivanova", "irina@gmail.com", null);
 
-        Item item = new Item(4L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
+        Item item = new Item(4L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
 
         Booking booking = new Booking(
                 5L,
@@ -482,7 +482,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение, если юзер не найден")
+    @DisplayName("Should throw an exception if the user is not found")
     void getBookingsByBookerIdWithFilter_shouldThrowException_ifOwnerNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(ForbiddenExcepton.class, () -> bookingService.getBookingsByBookerIdWithFilter(
@@ -490,7 +490,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вызвать метод findByBookerIdOrderByStartDesc, когда state = ALL")
+    @DisplayName("Should call findByBookerIdOrderByStartDesc when state = ALL")
     void getBookingsByBookerIdWithFilter_shouldCallRelevantMethod_ifStateIsALL() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
 
@@ -501,7 +501,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вызвать метод findByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc, когда state = CURRENT")
+    @DisplayName("Should call findByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc when state = CURRENT")
     void getBookingsByBookerIdWithFilter_shouldCallRelevantMethod_ifStateIsCURRENT() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
 
@@ -512,7 +512,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вызвать метод findByBookerIdAndEndBeforeOrderByStartDesc, когда state = PAST")
+    @DisplayName("Should call findByBookerIdAndEndBeforeOrderByStartDesc when state = PAST")
     void getBookingsByBookerIdWithFilter_shouldCallRelevantMethod_ifStateIsPAST() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
 
@@ -523,7 +523,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вызвать метод findByBookerIdAndStartAfterOrderByStartDesc, когда state = FUTURE")
+    @DisplayName("Should call findByBookerIdAndStartAfterOrderByStartDesc when state = FUTURE")
     void getBookingsByBookerIdWithFilter_shouldCallRelevantMethod_ifStateIsFUTURE() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
 
@@ -534,7 +534,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вызвать метод findByBookerIdAndStartAfterOrderByStartDesc, когда state = WAITING")
+    @DisplayName("Should call findByBookerIdAndStartAfterOrderByStartDesc when state = WAITING")
     void getBookingsByBookerIdWithFilter_shouldCallRelevantMethod_ifStateIsWAITING() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
 
@@ -545,7 +545,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вызвать метод findByBookerIdAndStatusOrderByStartDesc, когда state = REJECTED")
+    @DisplayName("Should call findByBookerIdAndStatusOrderByStartDesc when state = REJECTED")
     void getBookingsByBookerIdWithFilter_shouldCallRelevantMethod_ifStateIsREJECTED() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
 
@@ -556,7 +556,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение, если юзер не найден")
+    @DisplayName("Should throw an exception if the user is not found")
     void getBookingsByOwnerIdWithFilter_shouldThrowException_ifOwnerNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(ForbiddenExcepton.class, () -> bookingService.getBookingsByOwnerIdWithFilter(
@@ -564,7 +564,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вернуть пустой лист, если у юзера нет вещей")
+    @DisplayName("Should return an empty list if the user has no items")
     void getBookingsByOwnerIdWithFilter_shouldReturnEmptyList_ifOwnerDasNotHaveItems() {
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());
 
@@ -578,14 +578,14 @@ class BookingServiceImplTest {
 
 
     @Test
-    @DisplayName("Должен вызвать метод findByItemOwnerIdOrderByStartDesc, когда state = ALL")
+    @DisplayName("Should call findByItemOwnerIdOrderByStartDesc when state = ALL")
     void getBookingsByOwnerIdWithFilter_shouldCallRelevantMethod_ifStateIsALL() {
 
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());
-        Item item1 = new Item(2L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
-        Item item2 = new Item(3L, owner, "Шуруповерт",
-                "Красный шупуповерт", true, null);
+        Item item1 = new Item(2L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
+        Item item2 = new Item(3L, owner, "Cordless drill",
+                "Red cordless drill", true, null);
         owner.getItems().add(item1);
         owner.getItems().add(item2);
 
@@ -598,15 +598,14 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вызвать метод findByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc, " +
-            "когда state = CURRENT")
+    @DisplayName("Should call findByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc when state = CURRENT")
     void getBookingsByOwnerIdWithFilter_shouldCallRelevantMethod_ifStateIsCURRENT() {
 
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());
-        Item item1 = new Item(2L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
-        Item item2 = new Item(3L, owner, "Шуруповерт",
-                "Красный шупуповерт", true, null);
+        Item item1 = new Item(2L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
+        Item item2 = new Item(3L, owner, "Cordless drill",
+                "Red cordless drill", true, null);
         owner.getItems().add(item1);
         owner.getItems().add(item2);
 
@@ -619,14 +618,14 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вызвать метод findByItemOwnerIdAndEndBeforeOrderByStartDesc, когда state = PAST")
+    @DisplayName("Should call findByItemOwnerIdAndEndBeforeOrderByStartDesc when state = PAST")
     void getBookingsByOwnerIdWithFilter_shouldCallRelevantMethod_ifStateIsPAST() {
 
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());
-        Item item1 = new Item(2L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
-        Item item2 = new Item(3L, owner, "Шуруповерт",
-                "Красный шупуповерт", true, null);
+        Item item1 = new Item(2L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
+        Item item2 = new Item(3L, owner, "Cordless drill",
+                "Red cordless drill", true, null);
         owner.getItems().add(item1);
         owner.getItems().add(item2);
 
@@ -639,14 +638,14 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вызвать метод findByItemOwnerIdAndStartAfterOrderByStartDesc, когда state = FUTURE")
+    @DisplayName("Should call findByItemOwnerIdAndStartAfterOrderByStartDesc when state = FUTURE")
     void getBookingsByOwnerIdWithFilter_shouldCallRelevantMethod_ifStateIsFUTURE() {
 
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());
-        Item item1 = new Item(2L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
-        Item item2 = new Item(3L, owner, "Шуруповерт",
-                "Красный шупуповерт", true, null);
+        Item item1 = new Item(2L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
+        Item item2 = new Item(3L, owner, "Cordless drill",
+                "Red cordless drill", true, null);
         owner.getItems().add(item1);
         owner.getItems().add(item2);
 
@@ -659,14 +658,14 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вызвать метод findByItemOwnerIdAndStatusOrderByStartDesc, когда state = WAITING")
+    @DisplayName("Should call findByItemOwnerIdAndStatusOrderByStartDesc when state = WAITING")
     void getBookingsByOwnerIdWithFilter_shouldCallRelevantMethod_ifStateIsWAITING() {
 
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());
-        Item item1 = new Item(2L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
-        Item item2 = new Item(3L, owner, "Шуруповерт",
-                "Красный шупуповерт", true, null);
+        Item item1 = new Item(2L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
+        Item item2 = new Item(3L, owner, "Cordless drill",
+                "Red cordless drill", true, null);
         owner.getItems().add(item1);
         owner.getItems().add(item2);
 
@@ -679,14 +678,14 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вызвать метод findByItemOwnerIdAndStatusOrderByStartDesc, когда state = REJECTED")
+    @DisplayName("Should call findByItemOwnerIdAndStatusOrderByStartDesc when state = REJECTED")
     void getBookingsByOwnerIdWithFilter_shouldCallRelevantMethod_ifStateIsREJECTED() {
 
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());
-        Item item1 = new Item(2L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
-        Item item2 = new Item(3L, owner, "Шуруповерт",
-                "Красный шупуповерт", true, null);
+        Item item1 = new Item(2L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
+        Item item2 = new Item(3L, owner, "Cordless drill",
+                "Red cordless drill", true, null);
         owner.getItems().add(item1);
         owner.getItems().add(item2);
 

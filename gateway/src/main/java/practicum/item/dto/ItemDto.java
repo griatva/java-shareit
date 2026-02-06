@@ -13,14 +13,14 @@ public class ItemDto {
 
     private Long id;
 
-    @NotBlank(message = "Название не может быть пустым")
+    @NotBlank(message = "Name must not be blank")
     private String name;
 
-    @NotBlank(message = "Описание не может быть пустым")
-    @Size(max = 300, message = "Длина описания должна быть не более 300 символов")
+    @NotBlank(message = "Description must not be blank")
+    @Size(max = 300, message = "Description length must not exceed 300 characters")
     private String description;
 
-    @NotNull(message = "Это поле обязательно для заполнения")
+    @NotNull(message = "Field is required")
     private Boolean available;
 
     private Long requestId;

@@ -41,7 +41,7 @@ public class ItemServiceImpl implements ItemService {
         if (itemDto.getRequestId() != null) {
             boolean exists = itemRequestRepository.existsById(itemDto.getRequestId());
             if (!exists) {
-                throw new NotFoundException("Запрос с id " + itemDto.getRequestId() + " не найден");
+                throw new NotFoundException("Request with id " + itemDto.getRequestId() + " was not found");
             }
         }
         Item savedItem = itemRepository.save(item);
@@ -54,7 +54,7 @@ public class ItemServiceImpl implements ItemService {
         Item item = findItemById(itemId);
         findUserById(ownerId);
         if (!item.getOwner().getId().equals(ownerId)) {
-            throw new ForbiddenExcepton("Редактировать вещь может только ее владелец");
+            throw new ForbiddenExcepton("Only the item owner can edit the item");
         }
         if (updates.getName() == null && updates.getDescription() == null && updates.getAvailable() == null) {
             List<CommentDto> commentsDto = CommentMapper.toCommentDtoList(commentRepository.findByItemId(item.getId()));
@@ -170,18 +170,18 @@ public class ItemServiceImpl implements ItemService {
 
     private User findUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден"));
+                .orElseThrow(() -> new NotFoundException("User with id " + userId + " was not found"));
     }
 
     private Item findItemById(Long itemId) {
         return itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException("Вещь с id " + itemId + " не найдена"));
+                .orElseThrow(() -> new NotFoundException("Item with id " + itemId + " was not found"));
     }
 
     private Booking findBookingByBookerIdAndItemId(Long bookerId, Long itemId) {
         return bookingRepository.findByBookerIdAndItemId(bookerId, itemId)
-                .orElseThrow(() -> new NotFoundException("Бронирование заказчиком с id " + bookerId +
-                        " вещи с id " + itemId + " не найдено"));
+                .orElseThrow(() -> new NotFoundException("Booking by booker with id  " + bookerId +
+                        " for item with id " + itemId + " was not found"));
     }
 
     @Override
@@ -189,7 +189,7 @@ public class ItemServiceImpl implements ItemService {
 
         Booking booking = findBookingByBookerIdAndItemId(authorId, itemId);
         if (!booking.getEnd().isBefore(LocalDateTime.now())) {
-            throw new ValidationException("Создание отзыва возможно только после окончания срока аренды");
+            throw new ValidationException("Comment can be created only after the booking period has ended");
         }
 
         commentDto.setCreated(LocalDateTime.now());
