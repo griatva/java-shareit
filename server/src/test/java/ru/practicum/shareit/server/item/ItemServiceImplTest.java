@@ -23,6 +23,7 @@ import ru.practicum.shareit.server.request.ItemRequestRepository;
 import ru.practicum.shareit.server.user.User;
 import ru.practicum.shareit.server.user.UserRepository;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
@@ -360,21 +361,24 @@ class ItemServiceImplTest {
                 comment2.getAuthor().getId(), comment2.getAuthor().getName(), comment2.getCreated());
         List<CommentDto> commentsDtoExpected = List.of(commentDto1, commentDto2);
 
+        LocalDateTime now = LocalDateTime.now();
+        Duration bookingDuration = Duration.ofDays(10);
+
         Booking booking1 = new Booking(1L,
-                LocalDateTime.of(2024, 8, 1, 10, 20, 0, 0),
-                LocalDateTime.of(2024, 8, 10, 10, 20, 0, 0),
+                now.minusMonths(6),
+                now.minusMonths(6).plus(bookingDuration),
                 item, commentAuthor1, Status.APPROVED);
         Booking booking2 = new Booking(2L,
-                LocalDateTime.of(2024, 9, 1, 10, 20, 0, 0),
-                LocalDateTime.of(2024, 9, 10, 10, 20, 0, 0),
+                now.minusMonths(5),
+                now.minusMonths(5).plus(bookingDuration),
                 item, commentAuthor2, Status.APPROVED);
         Booking booking3 = new Booking(3L,
-                LocalDateTime.of(2025, 5, 1, 10, 20, 0, 0),
-                LocalDateTime.of(2025, 5, 10, 10, 20, 0, 0),
+                now.plusMonths(3),
+                now.plusMonths(3).plus(bookingDuration),
                 item, booker3, Status.APPROVED);
         Booking booking4 = new Booking(4L,
-                LocalDateTime.of(2025, 6, 1, 10, 20, 0, 0),
-                LocalDateTime.of(2025, 6, 10, 10, 20, 0, 0),
+                now.plusMonths(4),
+                now.plusMonths(4).plus(bookingDuration),
                 item, booker4, Status.APPROVED);
         List<Booking> itemBookings = List.of(booking1, booking2, booking3, booking4);
 
@@ -476,38 +480,41 @@ class ItemServiceImplTest {
                 comment4.getAuthor().getId(), comment4.getAuthor().getName(), comment4.getCreated());
         List<CommentDto> commentsDtoExpected2 = List.of(commentDto3, commentDto4);
 
+        LocalDateTime now = LocalDateTime.now();
+        Duration bookingDuration  = Duration.ofDays(10);
+
         Booking booking1 = new Booking(1L,
-                LocalDateTime.of(2024, 8, 1, 10, 20, 0, 0),
-                LocalDateTime.of(2024, 8, 10, 10, 20, 0, 0),
+                now.minusMonths(6),
+                now.minusMonths(6).plus(bookingDuration),
                 item1, commentAuthor1, Status.APPROVED);
         Booking booking2 = new Booking(2L,
-                LocalDateTime.of(2024, 9, 1, 10, 20, 0, 0),
-                LocalDateTime.of(2024, 9, 10, 10, 20, 0, 0),
+                now.minusMonths(5),
+                now.minusMonths(5).plus(bookingDuration),
                 item1, commentAuthor2, Status.APPROVED);
         Booking booking3 = new Booking(3L,
-                LocalDateTime.of(2025, 5, 1, 10, 20, 0, 0),
-                LocalDateTime.of(2025, 5, 10, 10, 20, 0, 0),
+                now.plusMonths(3),
+                now.plusMonths(3).plus(bookingDuration),
                 item1, booker3, Status.APPROVED);
         Booking booking4 = new Booking(4L,
-                LocalDateTime.of(2025, 6, 1, 10, 20, 0, 0),
-                LocalDateTime.of(2025, 6, 10, 10, 20, 0, 0),
+                now.plusMonths(4),
+                now.plusMonths(4).plus(bookingDuration),
                 item1, booker4, Status.APPROVED);
 
         Booking booking5 = new Booking(5L,
-                LocalDateTime.of(2024, 7, 1, 10, 20, 0, 0),
-                LocalDateTime.of(2024, 7, 10, 10, 20, 0, 0),
+                now.minusMonths(7),
+                now.minusMonths(7).plus(bookingDuration),
                 item2, commentAuthor1, Status.APPROVED);
         Booking booking6 = new Booking(6L,
-                LocalDateTime.of(2024, 8, 1, 10, 20, 0, 0),
-                LocalDateTime.of(2024, 8, 10, 10, 20, 0, 0),
+                now.minusMonths(6),
+                now.minusMonths(6).plus(bookingDuration),
                 item2, commentAuthor2, Status.APPROVED);
         Booking booking7 = new Booking(7L,
-                LocalDateTime.of(2025, 6, 1, 10, 20, 0, 0),
-                LocalDateTime.of(2025, 6, 10, 10, 20, 0, 0),
+                now.plusMonths(4),
+                now.plusMonths(4).plus(bookingDuration),
                 item2, booker3, Status.APPROVED);
         Booking booking8 = new Booking(8L,
-                LocalDateTime.of(2025, 7, 1, 10, 20, 0, 0),
-                LocalDateTime.of(2025, 7, 10, 10, 20, 0, 0),
+                now.plusMonths(5),
+                now.plusMonths(5).plus(bookingDuration),
                 item2, booker4, Status.APPROVED);
 
         List<Booking> itemsBookings = List.of(booking1, booking2, booking3, booking4,
