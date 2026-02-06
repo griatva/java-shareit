@@ -16,25 +16,25 @@ public class UserController {
 
     @PostMapping
     public UserDto create(@RequestBody UserDto userDto) {
-        log.debug("Создание пользователя [{}]", userDto);
+        log.debug("Creating user [{}]", userDto);
         return userService.create(userDto);
     }
 
     @PatchMapping("/{id}")
     public UserDto update(@PathVariable long id, @RequestBody UserUpdateDto updates) {
-        log.debug("Обновление пользователя с id = [{}]", id);
+        log.debug("Updating user with id = [{}]", id);
         return userService.update(id, updates);
     }
 
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable long id) {
-        log.debug("Получение пользователя с id = [{}]", id);
+        log.debug("Retrieving user with id = [{}]", id);
         return userService.getById(id);
     }
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable long id) {
-        log.debug("Удаление пользователя с id = [{}]", id);
+        log.debug("Deleting user with id = [{}]", id);
         userService.deleteById(id);
     }
 }

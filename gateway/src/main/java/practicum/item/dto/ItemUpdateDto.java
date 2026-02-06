@@ -7,11 +7,11 @@ import lombok.Data;
 @Data
 public class ItemUpdateDto {
 
-    @NotEmpty(message = "Название не может быть пустым или содержать только пробелы")
+    @NotEmpty(message = "Name must not be empty or contain only whitespace")
     private String name;
 
-    @NotEmpty(message = "Описание не может быть пустым или содержать только пробелы")
-    @Size(max = 300, message = "Длина описания должна быть не более 300 символов")
+    @NotEmpty(message = "Description must not be empty or contain only whitespace")
+    @Size(max = 300, message = "Description length must not exceed 300 characters")
     private String description;
 
     private Boolean available;

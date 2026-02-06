@@ -75,7 +75,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public ItemRequestWithItemInfoDto getById(Long requestId) {
         ItemRequest itemRequest = itemRequestRepository.findById(requestId)
-                .orElseThrow(() -> new NotFoundException("Запрос с id " + requestId + " не найден"));
+                .orElseThrow(() -> new NotFoundException("Request with id " + requestId + " was not found"));
 
         List<ItemProposedDto> proposedItems = ItemMapper.toItemProposedDtoList(
                 itemRepository.findByRequestId(requestId));
@@ -85,7 +85,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     private User findUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден"));
+                .orElseThrow(() -> new NotFoundException("User with id " + userId + " was not found"));
     }
 
 }

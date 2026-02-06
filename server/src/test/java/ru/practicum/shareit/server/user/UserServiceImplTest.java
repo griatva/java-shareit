@@ -36,7 +36,7 @@ class UserServiceImplTest {
     private ArgumentCaptor<User> userArgumentCaptor;
 
     @Test
-    @DisplayName("Должен выбросить исключение и не сохранять юзера в БД, если email уже существует в БД")
+    @DisplayName("Should throw an exception and not save the user to the database if the email already exists")
     void create_shouldThrowExceptionAndNotSaveUserIntoDB_ifEmailAlreadyExist() {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(new User()));
         assertThrows(DuplicatedDataException.class, () -> userService.create(new UserDto(
@@ -45,7 +45,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен сохранять корректный User в БД")
+    @DisplayName("Should save a correct user to the database")
     void create_shouldSaveCorrectUserIntoDB() {
         //given
         UserDto userDto = new UserDto(null, "Ivan Ivanov", "ivan@gmail.com");
@@ -73,7 +73,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вернуть корректный UserDto")
+    @DisplayName("Should return a correct UserDto")
     void create_shouldReturnCorrectUserDto() {
         //given
         UserDto userDto = new UserDto(null, "Ivan Ivanov", "ivan@gmail.com");
@@ -96,7 +96,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение и не обновлять юзера в БД, если юзер не найден")
+    @DisplayName("Should throw an exception and not update the user in the database if the user is not found")
     void update_shouldThrowExceptionAndNotUpdateUserInDB_ifUserNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(NotFoundException.class, () -> userService.update(1L, new UserUpdateDto(
@@ -105,7 +105,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение и не обновлять юзера в БД, если юзер не найден")
+    @DisplayName("Should throw an exception and not update the user in the database if the email already exists")
     void update_shouldThrowExceptionAndNotUpdateUserInDB_ifEmailAlreadyExist() {
 
         User oldUser = new User(
@@ -125,7 +125,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вернуть неизмененный UserDto, если все поля в UserUpdateDto равны null")
+    @DisplayName("Should return an unchanged UserDto if all fields in UserUpdateDto are null")
     void update_shouldReturnUnchangedUserDto_ifAllFieldsInUserUpdateDtoEqualNull() {
         User oldUser = new User(
                 1L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());
@@ -144,7 +144,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен изменить только поле name, если только оно передается в UserUpdateDto")
+    @DisplayName("Should update only the name if only name is provided in UserUpdateDto")
     void update_shouldReturnUserDtoWithChangedName_ifOnlyNameProvidedInUserUpdateDto() {
         //given
         User oldUser = new User(
@@ -167,7 +167,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен изменить только поле email, если только оно передается в UserUpdateDto")
+    @DisplayName("Should update only the email if only email is provided in UserUpdateDto")
     void update_shouldReturnUserDtoWithChangedEmail_ifOnlyEmailProvidedInUserUpdateDto() {
         //given
         User oldUser = new User(
@@ -191,7 +191,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен изменить name и email, если оба поля передаются в UserUpdateDto")
+    @DisplayName("Should update both name and email if both fields are provided in UserUpdateDto")
     void update_shouldReturnUserDtoWithChangedNameAndEmail_ifBothProvidedInUserUpdateDto() {
         //given
         User oldUser = new User(
@@ -216,14 +216,14 @@ class UserServiceImplTest {
 
 
     @Test
-    @DisplayName("Должен выбросить исключение, если юзер не найден")
+    @DisplayName("Should throw an exception if the user is not found")
     void getById_shouldThrowException_ifUserNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(NotFoundException.class, () -> userService.getById(1L));
     }
 
     @Test
-    @DisplayName("Должен вернуть корректный UserDto")
+    @DisplayName("Should return a correct UserDto")
     void getById_shouldReturnCorrectUserDto() {
         User user = new User(
                 10L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());

@@ -10,7 +10,7 @@ public class CommentDto {
 
     private Long id;
 
-    @NotBlank(message = "Отзыв не может быть пустым")
+    @NotBlank(message = "Comment must not be blank")
     private String text;
 
     private Long itemId;

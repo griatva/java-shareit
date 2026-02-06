@@ -28,19 +28,19 @@ class BookingIntegrationTest {
 
     @Test
     void getBookingsByBookerIdWithFilter_shouldReturnFilteredBookings() {
-        // Создаем пользователя
+        // Create a user
         UserDto bookerDto = new UserDto(null, "Alex Petrov", "alex@gmail.com");
         ResponseEntity<UserDto> responseBooker = testRestTemplate.postForEntity("/users", bookerDto, UserDto.class);
         assertNotNull(responseBooker.getBody());
         Long bookerId = responseBooker.getBody().getId();
 
-        // Создаем вещи для бронирования
+        // Create items to be booked
         ItemDto itemDto1 = new ItemDto(null, "Drill", "Red drill", true, null, null);
         ItemDto itemDto2 = new ItemDto(null, "Hammer", "Heavy hammer", true, null, null);
         Long itemId1 = createItem(bookerId, itemDto1).getId();
         Long itemId2 = createItem(bookerId, itemDto2).getId();
 
-        // Создаем различные бронирования для фильтрации
+        // Create bookings with different states for filtering
         Booking bookingPast = createBooking(bookerId, itemId1, LocalDateTime.now().minusDays(2), LocalDateTime.now().minusDays(1));
         Booking bookingFuture = createBooking(bookerId, itemId1, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2));
         Booking bookingCurrent = createBooking(bookerId, itemId2, LocalDateTime.now().minusHours(1), LocalDateTime.now().plusHours(1));
@@ -52,7 +52,7 @@ class BookingIntegrationTest {
         approveOrRejectBooking(bookerId, bookingCurrent.getId(), true);
         approveOrRejectBooking(bookerId, bookingRejected.getId(), false);
 
-        // Получаем бронирования с фильтрацией по статусу "ALL"
+        // Retrieve bookings filtered by state = "ALL"
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Sharer-User-Id", String.valueOf(bookerId));
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
@@ -63,35 +63,35 @@ class BookingIntegrationTest {
         assertNotNull(responseAll.getBody());
         assertThat(responseAll.getBody().length).isEqualTo(5);
 
-        // Получаем бронирования с фильтрацией по статусу "PAST"
+        // Retrieve bookings filtered by state = "PAST"
         ResponseEntity<BookingDto[]> responsePast = testRestTemplate.exchange(
                 "/bookings?state=PAST", HttpMethod.GET, requestEntity, BookingDto[].class);
         assertThat(responsePast.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertNotNull(responsePast.getBody());
         assertThat(responsePast.getBody().length).isEqualTo(2);
 
-        // Получаем бронирования с фильтрацией по статусу "FUTURE"
+        // Retrieve bookings filtered by state = "FUTURE"
         ResponseEntity<BookingDto[]> responseFuture = testRestTemplate.exchange(
                 "/bookings?state=FUTURE", HttpMethod.GET, requestEntity, BookingDto[].class);
         assertThat(responseFuture.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertNotNull(responseFuture.getBody());
         assertThat(responseFuture.getBody().length).isEqualTo(2);
 
-        // Получаем бронирования с фильтрацией по статусу "CURRENT"
+        // Retrieve bookings filtered by state = "CURRENT"
         ResponseEntity<BookingDto[]> responseCurrent = testRestTemplate.exchange(
                 "/bookings?state=CURRENT", HttpMethod.GET, requestEntity, BookingDto[].class);
         assertThat(responseCurrent.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertNotNull(responseCurrent.getBody());
         assertThat(responseCurrent.getBody().length).isEqualTo(1);
 
-        // Получаем бронирования с фильтрацией по статусу "WAITING"
+        // Retrieve bookings filtered by state = "WAITING"
         ResponseEntity<BookingDto[]> responseWaiting = testRestTemplate.exchange(
                 "/bookings?state=WAITING", HttpMethod.GET, requestEntity, BookingDto[].class);
         assertThat(responseWaiting.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertNotNull(responseWaiting.getBody());
         assertThat(responseWaiting.getBody().length).isEqualTo(1);
 
-        // Получаем бронирования с фильтрацией по статусу "REJECTED"
+        // Retrieve bookings filtered by state = "REJECTED"
         ResponseEntity<BookingDto[]> responseRejected = testRestTemplate.exchange(
                 "/bookings?state=REJECTED", HttpMethod.GET, requestEntity, BookingDto[].class);
         assertThat(responseRejected.getStatusCode()).isEqualTo(HttpStatus.OK);

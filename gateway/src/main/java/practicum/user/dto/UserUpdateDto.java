@@ -10,11 +10,11 @@ public class UserUpdateDto {
 
 
     @Nullable
-    @Pattern(regexp = "^(?!\\s*$).+", message = "Поле не должно быть пустым или содержать только пробелы")
+    @Pattern(regexp = "^(?!\\s*$).+", message = "Field must not be blank")
     private String name;
 
     @Nullable
-    @Pattern(regexp = "^(?!\\s*$).+", message = "Поле не должно быть пустым или содержать только пробелы")
-    @Email(message = "Некорректный адрес электронной почты")
+    @Pattern(regexp = "^(?!\\s*$).+", message = "Field must not be blank")
+    @Email(message = "Invalid email address")
     private String email;
 }

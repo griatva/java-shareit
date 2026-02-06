@@ -60,13 +60,13 @@ class ItemServiceImplTest {
     private ArgumentCaptor<Comment> commentArgumentCaptor;
 
     @Test
-    @DisplayName("Должен выбросить исключение и не сохранять item в БД, если владелец не найден")
+    @DisplayName("Should throw an exception and not save the item to the database if the owner is not found")
     void create_shouldThrowExceptionAndNotSaveItemIntoDB_ifOwnerNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         ItemDto itemDto = new ItemDto(
                 null,
-                "Шуруповерт",
-                "Красный шупуповерт",
+                "Drill",
+                "Red drill",
                 true,
                 2L,
                 null);
@@ -75,7 +75,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выбросить исключение и не сохранять item в БД, если владелец не найден")
+    @DisplayName("Should throw an exception and not save the item to the database if the request is not found")
     void create_shouldThrowExceptionAndNotSaveItemIntoDB_ifRequestNotFound() {
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(owner));
@@ -83,8 +83,8 @@ class ItemServiceImplTest {
 
         ItemDto itemDto = new ItemDto(
                 null,
-                "Шуруповерт",
-                "Красный шупуповерт",
+                "Drill",
+                "Red drill",
                 true,
                 2L,
                 null);
@@ -94,7 +94,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен сохранять корректный Item")
+    @DisplayName("Should save a correct item")
     void create_shouldSaveCorrectItem() {
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(owner));
@@ -107,8 +107,8 @@ class ItemServiceImplTest {
 
         ItemDto itemDto = new ItemDto(
                 null,
-                "Шуруповерт",
-                "Красный шупуповерт",
+                "Drill",
+                "Red drill",
                 true,
                 2L,
                 null);
@@ -136,7 +136,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вернуть корректный ItemDto")
+    @DisplayName("Should return a correct ItemDto")
     void create_shouldReturnCorrectItemDto() {
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(owner));
@@ -149,16 +149,16 @@ class ItemServiceImplTest {
 
         ItemDto itemDto = new ItemDto(
                 null,
-                "Шуруповерт",
-                "Красный шупуповерт",
+                "Drill",
+                "Red drill",
                 true,
                 2L,
                 null);
 
         ItemDto itemDtoExpected = new ItemDto(
                 1L,
-                "Шуруповерт",
-                "Красный шупуповерт",
+                "Drill",
+                "Red drill",
                 true,
                 2L,
                 null);
@@ -174,12 +174,12 @@ class ItemServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выкинуть исключение, если вещь не найдена")
+    @DisplayName("Should throw an exception if the item is not found")
     void update_shouldThrowException_ifItemNotFound() {
         when(itemRepository.findById(anyLong())).thenReturn(Optional.empty());
         ItemUpdateDto itemUpdateDto = new ItemUpdateDto(
-                "Шуруповерт",
-                "Красный шупуповерт",
+                "Drill",
+                "Red drill",
                 true
         );
 
@@ -189,14 +189,14 @@ class ItemServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выкинуть исключение, если владелец не найден")
+    @DisplayName("Should throw an exception if the owner is not found")
     void update_shouldThrowException_ifOwnerNotFound() {
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(new Item()));
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         ItemUpdateDto itemUpdateDto = new ItemUpdateDto(
-                "Шуруповерт",
-                "Красный шупуповерт",
+                "Drill",
+                "Red drill",
                 true
         );
 
@@ -205,20 +205,20 @@ class ItemServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выкинуть исключение, если переданный юзер не является владельцем вещи")
+    @DisplayName("Should throw an exception if the provided user is not the item owner")
     void update_shouldThrowException_ifUserIsNotOwner() {
         User providedOwner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());
         User actualOwner = new User(15L, "Piotr Petrov", "piotr@gmail.com", new HashSet<>());
 
-        Item item = new Item(1L, actualOwner, "Отвертка",
-                "Крестовая отвертка", true, null);
+        Item item = new Item(1L, actualOwner, "Screwdriver",
+                "Phillips screwdriver", true, null);
 
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(providedOwner));
 
         ItemUpdateDto itemUpdateDto = new ItemUpdateDto(
-                "Шуруповерт",
-                "Красный шупуповерт",
+                "Drill",
+                "Red drill",
                 true
         );
 
@@ -228,24 +228,24 @@ class ItemServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен поменять в Item только переданные поля в ItemUpdateDto")
+    @DisplayName("Should update only the fields provided in ItemUpdateDto")
     void update_shouldChangeAllowedFields() {
         User actualOwner = new User(15L, "Piotr Petrov", "piotr@gmail.com", new HashSet<>());
-        Item item = new Item(1L, actualOwner, "Отвертка",
-                "Крестовая отвертка", true, null);
+        Item item = new Item(1L, actualOwner, "Screwdriver",
+                "Phillips screwdriver", true, null);
 
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(actualOwner));
         when(itemRepository.save(any(Item.class))).thenAnswer(invocationOnMock -> invocationOnMock.getArgument(0));
 
         ItemUpdateDto itemUpdateDto = new ItemUpdateDto(
-                "Шуруповерт",
-                "Красный шупуповерт",
+                "Drill",
+                "Red drill",
                 false
         );
 
-        Item itemExpected = new Item(1L, actualOwner, "Шуруповерт",
-                "Красный шупуповерт", false, null);
+        Item itemExpected = new Item(1L, actualOwner, "Drill",
+                "Red drill", false, null);
 
 
         //when
@@ -263,14 +263,14 @@ class ItemServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выкинуть исключение, если вещь не найдена")
+    @DisplayName("Should throw an exception if the item is not found")
     void getById_shouldThrowException_ifItemNotFound() {
         when(itemRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(NotFoundException.class, () -> itemService.getById(1L, 1L));
     }
 
     @Test
-    @DisplayName("Должен выкинуть исключение, если юзер не найден")
+    @DisplayName("Should throw an exception if the user is not found")
     void getById_shouldThrowException_ifRequestorNotFound() {
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(new Item()));
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
@@ -280,19 +280,19 @@ class ItemServiceImplTest {
 
 
     @Test
-    @DisplayName("Должен вернуть ItemWithBookingsDto с незаполненными полями о букинге," +
-            "если реквестор - не владелец вещи")
+    @DisplayName(
+            "Should return ItemWithBookingsDto with empty booking fields if the requester is not the item owner")
     void getById_shouldReturnItemWithBookingsDtoWithNullBookingFields_ifRequesterIsNotTheOwnerOfItem() {
         User requestor = new User(1L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());
         User owner = new User(15L, "Piotr Petrov", "piotr@gmail.com", new HashSet<>());
         User commentAuthor1 = new User(17L, "Vasia Vasilyev", "vasia@gmail.com", new HashSet<>());
         User commentAuthor2 = new User(25L, "Anna Alekseeva", "anna@gmail.com", new HashSet<>());
-        Item item = new Item(1L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
+        Item item = new Item(1L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
 
-        Comment comment1 = new Comment(1L, "Отличная отвертка", item, commentAuthor1,
+        Comment comment1 = new Comment(1L, "Super screwdriver", item, commentAuthor1,
                 LocalDateTime.of(2025, 1, 2, 15, 30, 10, 10));
-        Comment comment2 = new Comment(2L, "Ужасная отвертка", item, commentAuthor2,
+        Comment comment2 = new Comment(2L, "Terrible screwdriver", item, commentAuthor2,
                 LocalDateTime.of(2025, 3, 8, 15, 30, 10, 10));
         List<Comment> comments = List.of(comment1, comment2);
 
@@ -336,8 +336,8 @@ class ItemServiceImplTest {
 
 
     @Test
-    @DisplayName("Должен вернуть ItemWithBookingsDto с заполненными полями о букинге," +
-            "если реквестор - это владелец вещи")
+    @DisplayName(
+            "Should return ItemWithBookingsDto with populated booking fields if the requester is the item owner")
     void getById_shouldReturnItemWithBookingsDtoWithPopulatedBookingFields_ifRequesterIsTheOwnerOfItem() {
         //given
         User requestor = new User(1L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());
@@ -345,12 +345,12 @@ class ItemServiceImplTest {
         User commentAuthor2 = new User(25L, "Anna Alekseeva", "anna@gmail.com", new HashSet<>());
         User booker3 = new User(27L, "Ira Alekseeva", "ira@gmail.com", new HashSet<>());
         User booker4 = new User(29L, "Sofia Alekseeva", "sofia@gmail.com", new HashSet<>());
-        Item item = new Item(1L, requestor, "Отвертка",
-                "Крестовая отвертка", true, null);
+        Item item = new Item(1L, requestor, "Screwdriver",
+                "Phillips screwdriver", true, null);
 
-        Comment comment1 = new Comment(1L, "Отличная отвертка", item, commentAuthor1,
+        Comment comment1 = new Comment(1L, "Super screwdriver", item, commentAuthor1,
                 LocalDateTime.of(2025, 1, 2, 15, 30, 10, 10));
-        Comment comment2 = new Comment(2L, "Ужасная отвертка", item, commentAuthor2,
+        Comment comment2 = new Comment(2L, "Terrible screwdriver", item, commentAuthor2,
                 LocalDateTime.of(2025, 3, 8, 15, 30, 10, 10));
         List<Comment> comments = List.of(comment1, comment2);
 
@@ -418,14 +418,14 @@ class ItemServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выкинуть исключение, если юзер не найден")
+    @DisplayName("Should throw an exception if the user is not found")
     void getAllItemsByOwnerWithBookings_shouldThrowException_ifUserNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(NotFoundException.class, () -> itemService.getAllItemsByOwnerWithBookings(1L));
     }
 
     @Test
-    @DisplayName("Должен вернуть пустой лист, если у юзера нет вещей")
+    @DisplayName("Should return an empty list if the user has no items")
     void getAllItemsByOwnerWithBookings_shouldReturnEmptyList_ifUserDasNotHaveItems() {
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
@@ -437,7 +437,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вернуть лист с ItemWithBookingsDto")
+    @DisplayName("Should return a list of ItemWithBookingsDto")
     void getAllItemsByOwnerWithBookings_shouldReturnItemWithBookingsDtoList() {
         //given
         User owner = new User(1L, "Ivan Ivanov", "ivan@gmail.com", new HashSet<>());
@@ -446,21 +446,21 @@ class ItemServiceImplTest {
         User booker3 = new User(27L, "Ira Alekseeva", "ira@gmail.com", new HashSet<>());
         User booker4 = new User(29L, "Sofia Alekseeva", "sofia@gmail.com", new HashSet<>());
 
-        Item item1 = new Item(1L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
-        Item item2 = new Item(2L, owner, "Шуруповерт",
-                "Красный шуруповерт", true, null);
+        Item item1 = new Item(1L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
+        Item item2 = new Item(2L, owner, "Drill",
+                "Red drill", true, null);
         List<Item> itemList = List.of(item1, item2);
 
-        Comment comment1 = new Comment(1L, "Отличная отвертка", item1, commentAuthor1,
+        Comment comment1 = new Comment(1L, "Super screwdriver", item1, commentAuthor1,
                 LocalDateTime.of(2025, 1, 2, 15, 30, 10, 10));
-        Comment comment2 = new Comment(2L, "Ужасная отвертка", item1, commentAuthor2,
+        Comment comment2 = new Comment(2L, "Terrible screwdriver", item1, commentAuthor2,
                 LocalDateTime.of(2025, 3, 8, 15, 30, 10, 10));
         List<Comment> commentList1 = List.of(comment1, comment2);
 
-        Comment comment3 = new Comment(3L, "Отличный шуруповерт", item2, commentAuthor1,
+        Comment comment3 = new Comment(3L, "Super drill", item2, commentAuthor1,
                 LocalDateTime.of(2025, 1, 2, 15, 30, 10, 10));
-        Comment comment4 = new Comment(4L, "Ужасный шуруповерт", item2, commentAuthor2,
+        Comment comment4 = new Comment(4L, "Terrible drill", item2, commentAuthor2,
                 LocalDateTime.of(2025, 3, 8, 15, 30, 10, 10));
         List<Comment> commentList2 = List.of(comment3, comment4);
 
@@ -568,21 +568,21 @@ class ItemServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вернуть пустой лист, если строка null")
+    @DisplayName("Should return an empty list if the text is null")
     void getAllItemsByText_shouldReturnEmptyList_ifTextIsNull() {
         List<ItemDto> itemDtoList = itemService.getAllItemsByText(null);
         assertTrue(itemDtoList.isEmpty());
     }
 
     @Test
-    @DisplayName("Должен вернуть пустой лист, если строка пустая")
+    @DisplayName("Should return an empty list if the text is empty")
     void getAllItemsByText_shouldReturnEmptyList_ifTextIsEmpty() {
         List<ItemDto> itemDtoList = itemService.getAllItemsByText("");
         assertTrue(itemDtoList.isEmpty());
     }
 
     @Test
-    @DisplayName("Должен вернуть пустой лист, если строка состоит из пробелов")
+    @DisplayName("Should return an empty list if the text contains only whitespace")
     void getAllItemsByText_shouldReturnEmptyList_ifTextConsistsOfSpaces() {
         List<ItemDto> itemDtoList = itemService.getAllItemsByText("  ");
         assertTrue(itemDtoList.isEmpty());
@@ -590,7 +590,7 @@ class ItemServiceImplTest {
 
 
     @Test
-    @DisplayName("Должен выкинуть исключение, если не нашлось букинга этой вещи этим юзером")
+    @DisplayName("Should throw an exception if no booking for this item by this user is found")
     void createComment_shouldThrowException_ifBookingOfThisItemByThisUserNotFound() {
         when(bookingRepository.findByBookerIdAndItemId(anyLong(), anyLong())).thenReturn(Optional.empty());
         assertThrows(NotFoundException.class, () -> itemService.createComment(1L, 2L, new CommentDto()));
@@ -598,12 +598,12 @@ class ItemServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен выкинуть исключение, если срок бронировая не закончился")
+    @DisplayName("Should throw an exception if the booking period has not ended")
     void createComment_shouldThrowException_ifBookingTermHasNotExpired() {
         User owner = new User(1L, "Vasiliy Alekseev", "vasiliy@gmail.com", new HashSet<>());
         User booker = new User(2L, "Sofia Alekseeva", "sofia@gmail.com", new HashSet<>());
-        Item item = new Item(3L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
+        Item item = new Item(3L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
 
         Booking booking = new Booking(8L,
                 LocalDateTime.of(2025, 1, 1, 10, 20, 0, 0),
@@ -617,12 +617,12 @@ class ItemServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен сохранить правильный Comment")
+    @DisplayName("Should save a correct comment")
     void createComment_shouldSaveCorrectComment() {
         User owner = new User(1L, "Vasiliy Alekseev", "vasiliy@gmail.com", new HashSet<>());
         User booker = new User(2L, "Sofia Alekseeva", "sofia@gmail.com", new HashSet<>());
-        Item item = new Item(3L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
+        Item item = new Item(3L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
 
         Booking booking = new Booking(4L,
                 LocalDateTime.of(2025, 1, 1, 10, 20, 0, 0),
@@ -631,7 +631,7 @@ class ItemServiceImplTest {
 
         CommentDto commentDto = new CommentDto(
                 null,
-                "Прекрасная отвертка",
+                "Super screwdriver",
                 item.getId(),
                 booker.getId(),
                 booker.getName(),
@@ -668,13 +668,13 @@ class ItemServiceImplTest {
     }
 
     @Test
-    @DisplayName("Должен вернуть правильный CommentDto")
+    @DisplayName("Should return a correct CommentDto")
     void createComment_shouldReturnCorrectCommentDto() {
         //given
         User owner = new User(1L, "Vasiliy Alekseev", "vasiliy@gmail.com", new HashSet<>());
         User booker = new User(2L, "Sofia Alekseeva", "sofia@gmail.com", new HashSet<>());
-        Item item = new Item(3L, owner, "Отвертка",
-                "Крестовая отвертка", true, null);
+        Item item = new Item(3L, owner, "Screwdriver",
+                "Phillips screwdriver", true, null);
 
         Booking booking = new Booking(4L,
                 LocalDateTime.of(2025, 1, 1, 10, 20, 0, 0),
@@ -683,7 +683,7 @@ class ItemServiceImplTest {
 
         CommentDto commentDto = new CommentDto(
                 null,
-                "Прекрасная отвертка",
+                "Super screwdriver",
                 item.getId(),
                 booker.getId(),
                 booker.getName(),
@@ -706,7 +706,7 @@ class ItemServiceImplTest {
         Comment savedComment = commentArgumentCaptor.getValue();
         CommentDto commentDtoExpected = new CommentDto(
                 1L,
-                "Прекрасная отвертка",
+                "Super screwdriver",
                 item.getId(),
                 booker.getId(),
                 booker.getName(),

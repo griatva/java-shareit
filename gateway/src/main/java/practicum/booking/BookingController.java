@@ -19,7 +19,7 @@ public class BookingController {
     @PostMapping
     public ResponseEntity<Object> create(@RequestHeader("X-Sharer-User-Id") long bookerId,
                                          @Valid @RequestBody BookingDto bookingDto) {
-        log.debug("Создание бронирования [{}], id заказчика = [{}]", bookingDto, bookerId);
+        log.debug("Creating booking [{}], bookerId = [{}]", bookingDto, bookerId);
         return bookingClient.create(bookerId, bookingDto);
     }
 
@@ -27,15 +27,15 @@ public class BookingController {
     public ResponseEntity<Object> approveOrRejectBooking(@RequestHeader("X-Sharer-User-Id") long ownerId,
                                                          @PathVariable long bookingId,
                                                          @RequestParam Boolean approved) {
-        log.debug("Подтверждение или отклонение запроса на бронирование с id = [{}], " +
-                "id владельца = [{}], isApproved = [{}]", bookingId, ownerId, approved);
+        log.debug("Approving or rejecting booking request with id = [{}], ownerId = [{}], approved = [{}]",
+                bookingId, ownerId, approved);
         return bookingClient.approveOrRejectBooking(ownerId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
     public ResponseEntity<Object> getById(@RequestHeader("X-Sharer-User-Id") long requesterId,
                                           @PathVariable long bookingId) {
-        log.debug("Получение бронирования с id = [{}] пользователем с id = [{}]",
+        log.debug("Retrieving booking with id = [{}] by user with id = [{}]",
                 bookingId, requesterId);
         return bookingClient.getById(requesterId, bookingId);
     }
@@ -43,16 +43,20 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<Object> getBookingsByBookerIdWithFilter(@RequestHeader("X-Sharer-User-Id") long bookerId,
                                                                   @RequestParam(name = "state", defaultValue = "ALL") BookingState state) {
-        log.debug("Получение всех своих бронирований со статусом для фильтрации = [{}] заказчиком с id = [{}]",
-                state, bookerId);
+        log.debug(
+                "Retrieving all bookings for bookerId = [{}] with state filter = [{}]",
+                bookerId, state
+        );
         return bookingClient.getBookingsByBookerIdWithFilter(bookerId, state);
     }
 
     @GetMapping("/owner")
     public ResponseEntity<Object> getBookingsByOwnerIdWithFilter(@RequestHeader("X-Sharer-User-Id") long ownerId,
                                                                  @RequestParam(name = "state", defaultValue = "ALL") BookingState state) {
-        log.debug("Получение всех своих бронирований со статусом для фильтрации = [{}] владельцем с id = [{}]",
-                state, ownerId);
+        log.debug(
+                "Retrieving all bookings for ownerId = [{}] with state filter = [{}]",
+                ownerId, state
+        );
         return bookingClient.getBookingsByOwnerIdWithFilter(ownerId, state);
     }
 

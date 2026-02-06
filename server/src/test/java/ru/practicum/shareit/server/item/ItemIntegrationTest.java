@@ -33,14 +33,12 @@ class ItemIntegrationTest {
 
     @Test
     void create_shouldReturn200AndCreatedItemDto() {
-        // Создаем владельца
         UserDto owner = new UserDto(null, "Piotr Ivanov", "piotr85@gmail.com");
         ResponseEntity<UserDto> responseUser = testRestTemplate.postForEntity("/users", owner, UserDto.class);
         UserDto savedOwner = responseUser.getBody();
         assertNotNull(savedOwner);
         long ownerId = savedOwner.getId();
 
-        // Создаем item
         ItemDto itemDto = new ItemDto(
                 null,
                 "Drill",
@@ -73,25 +71,25 @@ class ItemIntegrationTest {
 
     @Test
     void getAllItemsByOwnerWithBookings_shouldReturnItemsWithBookings() {
-        // Создаем владельца
+        // Create an owner
         UserDto ownerDto = new UserDto(null, "Ivan Ivanov", "ivan14@gmail.com");
         ResponseEntity<UserDto> responseOwner = testRestTemplate.postForEntity("/users", ownerDto, UserDto.class);
         assertNotNull(responseOwner.getBody());
         Long ownerId = responseOwner.getBody().getId();
 
-        // Создаем другого пользователя для бронирования
+        // Create another user for booking
         UserDto bookerDto = new UserDto(null, "Alex Petrov", "alex66@gmail.com");
         ResponseEntity<UserDto> responseBooker = testRestTemplate.postForEntity("/users", bookerDto, UserDto.class);
         assertNotNull(responseBooker.getBody());
         Long bookerId = responseBooker.getBody().getId();
 
-        // Создаем другого пользователя для будущего бронирования
+        // Create another user for a future booking
         UserDto bookerDto2 = new UserDto(null, "Ira Petrova", "ira18@gmail.com");
         ResponseEntity<UserDto> responseBooker2 = testRestTemplate.postForEntity("/users", bookerDto2, UserDto.class);
         assertNotNull(responseBooker2.getBody());
         Long bookerId2 = responseBooker2.getBody().getId();
 
-        // Создаем два предмета для владельца
+        // Create two items for the owner
         ItemDto itemDto1 = new ItemDto(
                 null,
                 "Drill",
@@ -116,14 +114,14 @@ class ItemIntegrationTest {
         System.out.println(itemId2);
 
 
-        // Создаем бронирование для первого предмета
+        // Create a booking for the first item
         Booking bookingPast1 = createBooking(bookerId, itemId1, LocalDateTime.now().minusDays(2), LocalDateTime.now().minusDays(1));
         BookingShortDto bookingShortDtoLast1 = new BookingShortDto(bookingPast1.getStart(), bookingPast1.getEnd());
 
         Booking bookingFuture1 = createBooking(bookerId2, itemId1, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2));
         BookingShortDto bookingShortDtoNext1 = new BookingShortDto(bookingFuture1.getStart(), bookingFuture1.getEnd());
 
-        // Создаем бронирование для второго предмета
+        // Create a booking for the second item
         Booking bookingPast2 = createBooking(bookerId, itemId2, LocalDateTime.now().minusDays(3), LocalDateTime.now().minusDays(2));
         BookingShortDto bookingShortDtoLast2 = new BookingShortDto(bookingPast2.getStart(), bookingPast2.getEnd());
 
@@ -131,10 +129,10 @@ class ItemIntegrationTest {
         BookingShortDto bookingShortDtoNext2 = new BookingShortDto(bookingFuture2.getStart(), bookingFuture2.getEnd());
 
 
-        // Создаем комментарии для предметов
+        // Create comments for items
         CommentDto comment = createComment(bookerId, bookerDto.getName(), itemId1, "Great drill!");
 
-        // Получаем все предметы владельца с бронированиями
+        // Retrieve all owner items with bookings
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Sharer-User-Id", String.valueOf(ownerId));
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
@@ -148,7 +146,7 @@ class ItemIntegrationTest {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SS");
 
-        // Проверяем для первого предмета
+        // Verify the first item
         ItemWithBookingsDto itemWithBookings1 = response.getBody()[0];
         assertThat(itemWithBookings1.getId()).isEqualTo(itemId1);
         assertThat(itemWithBookings1.getName()).isEqualTo(itemDto1.getName());
@@ -167,7 +165,7 @@ class ItemIntegrationTest {
                 .isEqualTo(bookingShortDtoNext1.getEnd().format(formatter));
 
 
-        // Проверяем для второго предмета
+        // Verify the second item
         ItemWithBookingsDto itemWithBookings2 = response.getBody()[1];
         assertThat(itemWithBookings2.getId()).isEqualTo(itemId2);
         assertThat(itemWithBookings2.getName()).isEqualTo(itemDto2.getName());
@@ -240,19 +238,16 @@ class ItemIntegrationTest {
     @Test
     void createComment_shouldReturn200AndCrateComment() {
 
-        // Создаем владельца
         UserDto ownerDto = new UserDto(null, "Ivan Ivanov", "ivan98@gmail.com");
         ResponseEntity<UserDto> responseOwner = testRestTemplate.postForEntity("/users", ownerDto, UserDto.class);
         assertNotNull(responseOwner.getBody());
         Long ownerId = responseOwner.getBody().getId();
 
-        // Создаем другого пользователя для бронирования
         UserDto bookerDto = new UserDto(null, "Alex Petrov", "alex33@gmail.com");
         ResponseEntity<UserDto> responseBooker = testRestTemplate.postForEntity("/users", bookerDto, UserDto.class);
         assertNotNull(responseBooker.getBody());
         Long bookerId = responseBooker.getBody().getId();
 
-        // Создаем предмет для владельца
         ItemDto itemDto1 = new ItemDto(
                 null,
                 "Drill",
